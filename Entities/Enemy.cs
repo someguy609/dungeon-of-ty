@@ -40,6 +40,7 @@ public enum EnemyState
 public class Enemy : Character
 {
 	private EnemyState _state;
+	
 	public Enemy(string name, int health, int attack, int defense, float luck) : base(name, health, attack, defense, luck)
 	{
 		Moves.Add("kick", new Kick());
@@ -48,7 +49,7 @@ public class Enemy : Character
 
 	public void Update()
 	{
-		_state = Health <= MaxHealth / 3? EnemyState.DEFENSIVE : EnemyState.AGGRESSIVE;
+		_state = Health <= MaxHealth / 3 ? EnemyState.DEFENSIVE : EnemyState.AGGRESSIVE;
 	}
 
 	public void ExecuteAction(Character player)
@@ -66,6 +67,6 @@ public class Enemy : Character
 
 	public override Control GetRenderedItems()
 	{
-		return new Control();
+		return new Control(); // TODO
 	}
 }
