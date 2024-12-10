@@ -2,52 +2,38 @@ namespace dungeon_of_ty;
 
 public abstract class Character 
 {
-	private string _name;
-	private int _health;
-	private int _maxHealth;
-	private int _attack;
-	private int _defense;
-	public string Name { get { return _name; } }
-	public int Health { get { return _health; } }
-	public int MaxHealth { get { return _maxHealth; } }
-	public int Attack { get { return _attack; } }
-	public int Defense { get { return _defense; } }
-	public List<Buff> Buffs = new List<Buff>();
+	public string Name { get; set; }
+	public int Health { get; set; } = 100;
+	public int MaxHealth { get; set; } = 100;
+	public int Attack { get; set; } = 100;
+	public int Defense { get; set; } = 100;
+	public float Luck { get; set; } = 0.1f;
+	public List<Item> Inventory = new();
+	public Dictionary<string, Move> Moves = new();
+	public List<Buff> Buffs = new();
 
 	public abstract Control GetRenderedItems();
-	public abstract void StartTurn();
-	public abstract void EndTurn();
 
 	public void OnStartTurn()
 	{
 		foreach (Buff buff in Buffs)
-			buff.Trigger();
-		
-		StartTurn();
+		{
+			buff.Trigger(this);
+			// add counter to remove buff upon 0
+		}
 	}
 
 	public void OnEndTurn()
 	{
 		// do something idk
-		
-		EndTurn();
 	}
 	
-	public Character(string name, int health, int attack, int defense)
+	public Character(string name, int health, int attack, int defense, float luck)
 	{
-		if (string.IsNullOrEmpty(name))
-			throw new EmptyNameException();
-		if (health < 0)
-			throw new NegativeHealthException();
-		if (attack < 0)
-			throw new NegativeAttackException();
-		if (_defense < 0)
-			throw new NegativeDefenseException();
-
-		_name = name;
-		_health = health;
-		_maxHealth = health;
-		_attack = attack;
-		_defense = defense;
+		Name = name;
+		Health = health;
+		Attack = attack;
+		Defense = defense;
+		Luck = luck;
 	}
 }
