@@ -51,3 +51,14 @@ public class Kick : Move
 		target.Health -= source.Attack * 2;
     }
 }
+
+public class Roll20 : Move
+{
+	private Random _random = new();
+	public Roll20() : base("Roll 20", "Gain more luck or lose twice as much") {}
+
+    public override void Execute(Character source, Character target)
+    {
+		source.Luck += _random.Next(1, 21) == 20 ? 0.1 : -0.2;
+    }
+}
