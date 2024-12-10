@@ -21,9 +21,20 @@ public abstract class Buff
 
 public class Burn : Buff 
 {
-    public override void Trigger(Character target) {
+    public Burn() : base("Burn", "It burns") {}
+
+    public override void Trigger(Character target) 
+	{
 		target.Health -= 10;
 	}
+}
 
-    public Burn() : base("Burn", "It burns") {}
+public class Regen : Buff
+{
+	public Regen() : base("Regen", "Heal over time") {}
+
+    public override void Trigger(Character target)
+    {
+		target.Health += 10;
+    }
 }
