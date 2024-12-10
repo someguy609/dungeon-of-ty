@@ -7,8 +7,8 @@ public abstract class Character
 	public int MaxHealth { get; set; } = 100;
 	public int Attack { get; set; } = 100;
 	public int Defense { get; set; } = 100;
-	public float Luck { get; set; } = 0.1f;
-	public List<Item> Inventory = new();
+	public double Luck { get; set; } = 0.1;
+	public Inventory Inventory = new();
 	public Dictionary<string, Move> Moves = new();
 	public List<Buff> Buffs = new();
 
@@ -23,10 +23,7 @@ public abstract class Character
 		}
 	}
 
-	public void OnEndTurn()
-	{
-		// do something idk
-	}
+	public virtual void OnEndTurn() {}
 	
 	public Character(string name, int health, int attack, int defense, float luck)
 	{
