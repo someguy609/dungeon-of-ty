@@ -20,7 +20,6 @@ public abstract class Move
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
-	// public string MoveKey { get; set; }
 
 	public abstract void Execute(Character source, Character target);
 
@@ -28,7 +27,6 @@ public abstract class Move
 	{
 		Name = name;
 		Description = description;
-		// MoveKey = key;
 	}
 }
 
