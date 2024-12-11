@@ -41,7 +41,7 @@ public class Enemy : Character
 {
 	private EnemyState _state;
 	
-	public Enemy(string name, int health, int attack, int defense, float luck) : base(name, health, attack, defense, luck)
+	public Enemy(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck)
 	{
 		Moves.Add("kick", new Kick());
 		_state = EnemyState.AGGRESSIVE;
@@ -52,15 +52,17 @@ public class Enemy : Character
 		_state = Health <= MaxHealth / 3 ? EnemyState.DEFENSIVE : EnemyState.AGGRESSIVE;
 	}
 
-	public void ExecuteAction(Character player)
+	public void TakeTurn(Character player)
 	{
+		Update();
+
 		switch (_state)
 		{
 			case EnemyState.AGGRESSIVE:
-				Moves["kick"].Execute(this, player);
+				Fight(player);
 				break;
 			case EnemyState.DEFENSIVE:
-				// flee logic here
+				if (Flee()) Health = 0; // for now
 				break;
 		}
 	}
