@@ -3,6 +3,7 @@ namespace dungeon_of_ty;
 public abstract class Character
 {
 	protected Random _random = new();
+	protected PictureBox _sprite;
 
 	private int _health = 100;
 
@@ -17,7 +18,7 @@ public abstract class Character
 	public int Defense { get; set; } = 100;
 	public double Luck { get; set; } = 0.1;
 	public Inventory Inventory = new();
-	public Dictionary<string, Move> Moves = new();
+	public List<Move> Moves = new();
 	public List<Buff> Buffs = new();
 
 	public Character(string name, int health, int attack, int defense, double luck)
@@ -58,7 +59,7 @@ public abstract class Character
 
 	public virtual void OnEndTurn() { }
 
-	public abstract void Fight(Character target, string? move = null);
+	public abstract void Fight(Character target);
 
 	public bool Flee()
 	{

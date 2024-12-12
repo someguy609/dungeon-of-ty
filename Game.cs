@@ -42,8 +42,8 @@ public partial class Game : Panel
 		_menu.FleeButton.Click += (s, e) =>
 		{
 			if (_player.Flee())
-			{ 
-				MessageBox.Show("fled"); 
+			{
+				MessageBox.Show("fled");
 				Application.Exit();
 			}
 			else
@@ -68,6 +68,7 @@ public partial class Game : Panel
 	private void PlayerTurn()
 	{
 		_player.OnStartTurn();
+		_player.GetNewMove();
 		_menu.HideInfo();
 	}
 
@@ -82,7 +83,7 @@ public partial class Game : Panel
 			Application.Exit();
 		}
 
-		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
+		MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
 		_enemy.OnEndTurn();
 
@@ -101,6 +102,12 @@ public partial class Game : Panel
 		else if (char.IsLetterOrDigit(c))
 			_move += char.ToLower(c);
 
+		if (_move == _player.CurrentMove.GetWord())
+		{ 
+			_player.Fight(_enemy);
+			_move = "";
+		}
+
 		_menu.ShowInfo(_move);
 	}
 
@@ -108,22 +115,13 @@ public partial class Game : Panel
 	{
 		_timer.Stop();
 
-		try
-		{
-			_player.Fight(_enemy, _move);
-		}
-		catch
-		{
-			_player.Health -= 10;
-		}
-
 		if (_enemy.Health <= 0)
 		{
 			MessageBox.Show("win");
 			Application.Exit();
 		}
 
-		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
+		MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
 		_move = "";
 		_menu.HideInfo();

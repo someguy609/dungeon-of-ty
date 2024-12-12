@@ -2,18 +2,29 @@ namespace dungeon_of_ty;
 
 public class Player : Character
 {
+    public Move CurrentMove { get; private set; }
+
 	public Player(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck) 
     {
-        Moves.Add("punch", new Punch());
-        Moves.Add("kick", new Kick());
+        Moves.Add(new Punch());
+        Moves.Add(new Kick());
+
+        _sprite = new PictureBox
+        {
+            Size = new Size(800, 100),
+            BackColor = new Color(),
+        };
     }
 
-    public override void Fight(Character target, string? move = null)
+    public void GetNewMove() 
     {
-        if (string.IsNullOrEmpty(move) || !Moves.ContainsKey(move))
-            throw new MoveNotFoundException();
+        CurrentMove = Moves[_random.Next(0, Moves.Count)];
+    }
 
-        Moves[move].Execute(this, target);
+    public override void Fight(Character target)
+    {
+        CurrentMove.Execute(this, target);
+        GetNewMove();
     }
 
     public void Learn()
@@ -22,6 +33,6 @@ public class Player : Character
 
     public override Control GetRenderedItems()
     {
-        return null; // TODO
+        return _sprite; // TODO
     }
 }

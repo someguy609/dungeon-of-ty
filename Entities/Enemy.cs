@@ -12,13 +12,13 @@ public class Enemy : Character
 	
 	public Enemy(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck)
 	{
-		Moves.Add("kick", new Kick());
+		Moves.Add(new Kick());
 		_state = EnemyState.AGGRESSIVE;
 	}
 
-    public override void Fight(Character target, string? move = null)
+    public override void Fight(Character target)
     {
-		Moves.ElementAt(_random.Next(0, Moves.Count)).Value.Execute(this, target);
+		Moves.ElementAt(_random.Next(0, Moves.Count)).Execute(this, target);
     }
 
     public void Update()
