@@ -2,7 +2,8 @@ namespace dungeon_of_ty;
 
 public class Player : Character
 {
-    public Move CurrentMove { get; private set; }
+    private Move _currentMove;
+    public string MoveKey { get; private set; }
 
 	public Player(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck) 
     {
@@ -11,19 +12,22 @@ public class Player : Character
 
         _sprite = new PictureBox
         {
+            Dock = DockStyle.Bottom,
+            Anchor = AnchorStyles.Bottom,
             Size = new Size(800, 100),
-            BackColor = new Color(),
+            BackColor = Color.Gray,
         };
     }
 
     public void GetNewMove() 
     {
-        CurrentMove = Moves[_random.Next(0, Moves.Count)];
+        _currentMove = Moves[_random.Next(0, Moves.Count)];
+        MoveKey = Move.GetWord();
     }
 
     public override void Fight(Character target)
     {
-        CurrentMove.Execute(this, target);
+        _currentMove.Execute(this, target);
         GetNewMove();
     }
 

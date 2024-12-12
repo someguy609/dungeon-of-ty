@@ -1,24 +1,8 @@
 namespace dungeon_of_ty;
 
-// public static class Moveset
-// {
-// 	public static Action<Character, Character> Punch = (source, target) => {
-// 		target.Health -= ((int)Math.Floor(new Random().NextDouble() * source.Luck) + 1) * source.Attack;
-// 	};
-
-// 	public static Action<Character, Character> Kick = (source, target) => {
-// 		target.Health -= source.Attack * 2;
-// 	};
-
-// 	public static Action<Character, Character> Kamikaze = (source, target) => {
-// 		source.Health = 0;
-// 		target.Health = 0;
-// 	};
-// }
-
 public abstract class Move
 {
-	protected Random _random = new();
+	protected static Random _random = new();
 
 	protected static readonly List<string> Words = new() { "punch", "kick", "talk", "walk", "should", "would", "could", "slap", "trap", "nap", "sap" };
 
@@ -26,7 +10,7 @@ public abstract class Move
 	public readonly string Description;
 
 	public abstract void Execute(Character source, Character target);
-	public string GetWord() { return Words[_random.Next(0, Words.Count)]; }
+	public static string GetWord() { return Words[_random.Next(0, Words.Count)]; }
 
 	public Move(string name, string description)
 	{

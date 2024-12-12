@@ -102,7 +102,7 @@ public partial class Game : Panel
 		else if (char.IsLetterOrDigit(c))
 			_move += char.ToLower(c);
 
-		if (_move == _player.CurrentMove.GetWord())
+		if (_move == _player.MoveKey)
 		{ 
 			_player.Fight(_enemy);
 			_move = "";

@@ -13,7 +13,14 @@ public class Enemy : Character
 	public Enemy(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck)
 	{
 		Moves.Add(new Kick());
+
 		_state = EnemyState.AGGRESSIVE;
+
+		_sprite = new PictureBox
+		{
+			Size = new Size(100, 100),
+			BackColor = Color.Gray,
+		};
 	}
 
     public override void Fight(Character target)
@@ -43,6 +50,6 @@ public class Enemy : Character
 
 	public override Control GetRenderedItems()
 	{
-		return null; // TODO
+		return _sprite; // TODO
 	}
 }

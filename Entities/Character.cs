@@ -2,7 +2,7 @@ namespace dungeon_of_ty;
 
 public abstract class Character
 {
-	protected Random _random = new();
+	protected static Random _random = new();
 	protected PictureBox _sprite;
 
 	private int _health = 100;

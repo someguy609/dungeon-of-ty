@@ -35,7 +35,7 @@ public class NegativeDefenseException : NegativeNumberException
 	public NegativeDefenseException() : base("Defense") {}
 }
 
-public class MoveNotFoundException : Exception
+public class InventoryCapacityExceededException : Exception
 {
-	public MoveNotFoundException() : base("Move not found") {}
+	public InventoryCapacityExceededException() : base("Inventory capacity exceeded") {}
 }
