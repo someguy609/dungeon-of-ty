@@ -18,8 +18,8 @@ namespace dungeon_of_ty;
 
 public abstract class Move
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	public readonly string Name;
+	public readonly string Description;
 
 	public abstract void Execute(Character source, Character target);
 
@@ -58,5 +58,15 @@ public class Roll20 : Move
     public override void Execute(Character source, Character target)
     {
 		source.Luck += _random.Next(1, 21) == 20 ? 0.1 : -0.2;
+    }
+}
+
+public class Regenerate : Move
+{
+	public Regenerate() : base("Regenerate", "Heal over time over time") {}
+
+	public override void Execute(Character source, Character target)
+    {
+		source.Buffs.Add(new Regenerating());
     }
 }

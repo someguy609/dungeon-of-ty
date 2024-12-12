@@ -2,8 +2,8 @@ namespace dungeon_of_ty;
 
 public abstract class Item
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	public readonly string Name;
+	public readonly string Description;
 
 	public abstract void Use(Character target);
 
@@ -11,6 +11,8 @@ public abstract class Item
 	{
 		if (string.IsNullOrEmpty(name))
 			throw new EmptyNameException();
+		if (string.IsNullOrEmpty(description))
+			throw new EmptyDescriptionException();
 
 		Name = name;
 		Description = description;

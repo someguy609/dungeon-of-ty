@@ -2,8 +2,8 @@ namespace dungeon_of_ty;
 
 public abstract class Buff
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	public readonly string Name;
+	public readonly string Description;
 
 	public abstract void Trigger(Character target);
 
@@ -19,22 +19,40 @@ public abstract class Buff
 	}
 }
 
-public class Burn : Buff 
+public abstract class TemporaryBuff : Buff
 {
-    public Burn() : base("Burn", "It burns") {}
+	private int _duration;
+	private readonly int _maxDuration = int.MaxValue;
 
-    public override void Trigger(Character target) 
+	public int Duration
+	{
+		get { return _duration; }
+		set { _duration = Math.Min(value, _maxDuration); }
+	}
+
+	public TemporaryBuff(string name, string description, int duration) : base(name, description)
+	{
+		_maxDuration = duration;
+		Duration = duration;
+	}
+}
+
+public class Burning : TemporaryBuff
+{
+	public Burning(int duration = 3) : base("Burn", "It burns", duration) { }
+
+	public override void Trigger(Character target)
 	{
 		target.Health -= 10;
 	}
 }
 
-public class Regen : Buff
+public class Regenerating : TemporaryBuff
 {
-	public Regen() : base("Regen", "Heal over time") {}
+	public Regenerating(int duration = 3) : base("Regen", "Heal over time", duration) { }
 
-    public override void Trigger(Character target)
-    {
+	public override void Trigger(Character target)
+	{
 		target.Health += 10;
-    }
+	}
 }
