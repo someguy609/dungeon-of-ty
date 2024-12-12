@@ -16,7 +16,12 @@ public class Enemy : Character
 		_state = EnemyState.AGGRESSIVE;
 	}
 
-	public void Update()
+    public override void Fight(Character target, string? move = null)
+    {
+		Moves.ElementAt(_random.Next(0, Moves.Count)).Value.Execute(this, target);
+    }
+
+    public void Update()
 	{
 		_state = Health <= MaxHealth / 3 ? EnemyState.DEFENSIVE : EnemyState.AGGRESSIVE;
 	}

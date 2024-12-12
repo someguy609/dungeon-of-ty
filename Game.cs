@@ -7,7 +7,7 @@ public partial class Game : Form
 	private Player _player;
 	private Enemy _enemy;
 	private System.Windows.Forms.Timer _timer;
-	private string _move;
+	private string _move = "";
 
 	public Game()
 	{
@@ -15,8 +15,14 @@ public partial class Game : Form
 		MinimumSize = new Size(800, 600);
 		StartPosition = FormStartPosition.CenterScreen;
 
-		_player = new Player(Size);
-		_enemy = new Enemy(Size);
+		_player = new Player("Player", 100, 20, 100, 0.1);
+		_enemy = new Enemy("Enemy", 100, 20, 30, 0.1);
+
+		_timer = new System.Windows.Forms.Timer
+		{
+			Interval = 3000
+		};
+		_timer.Tick += new EventHandler(OnTick);
 
 		_menu = new Menu
 		{
@@ -26,76 +32,102 @@ public partial class Game : Form
 			BackColor = Color.AliceBlue,
 			Font = new Font("Arial", 14),
 		};
+
+		_menu.FightButton.Click += (s, e) =>
+		{
+			Focus();
+			_timer.Start();
+		};
+
+		_menu.FleeButton.Click += (s, e) =>
+		{
+			if (_player.Flee())
+			{ 
+				MessageBox.Show("fled"); 
+				Close();
+			}
+			else
+				MessageBox.Show("failed to flee");
+		};
+
 		Controls.Add(_menu);
-		// set buttons to public
-		// and connect them to custom handlers
 
 		_display = new Display(_player.GetRenderedItems(), _enemy.GetRenderedItems())
 		{
 			Dock = DockStyle.Top,
-			Height = 450
+			Height = 450,
+			TabStop = false,
 		};
 		Controls.Add(_display); // fix the resizing
 
-		InitializeGame();
-	}
-
-    public void InitializeGame()
-	{
 		KeyDown += new KeyEventHandler(OnKeyDown);
-		KeyUp += new KeyEventHandler(OnKeyUp);
 
-		_timer = new System.Windows.Forms.Timer
-		{
-			Interval = 3000
-		};
-		_timer.Tick += new EventHandler(OnTick);
-
-		GameLoop();
+		PlayerTurn();
 	}
 
-	public void GameLoop()
+	private void PlayerTurn()
 	{
-		// while (_player.Health > 0)
-		// {
-		// 	while (_enemy.Health > 0)
-		// 	{
-				
-		// 	}
-		// }
+		_player.OnStartTurn();
+		_menu.HideInfo();
 	}
 
-	private void OnKeyDown(object sender, KeyEventArgs e)
+	private void EnemyTurn()
 	{
-		switch (e.KeyCode)
+		_enemy.OnStartTurn();
+		_enemy.TakeTurn(_player);
+
+		if (_player.Health <= 0)
 		{
-			case Keys.W: case Keys.Up:
-				_move += "U";
-				break;
-			case Keys.A: case Keys.Left:
-				_move += "L";
-				break;
-			case Keys.S: case Keys.Down:
-				_move += "D";
-				break;
-			case Keys.D: case Keys.Right:
-				_move += "R";
-				break;
+			MessageBox.Show("lost");
+			Close();
 		}
+
+		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
+
+		_enemy.OnEndTurn();
+
+		PlayerTurn();
+	}
+
+	private void OnKeyDown(object? sender, KeyEventArgs e)
+	{
+		if (!_timer.Enabled)
+			return;
+
+		char c = (char)e.KeyValue;
+
+		if (char.IsLetterOrDigit(c))
+			_move += char.ToLower(c);
 
 		_menu.ShowInfo(_move);
 	}
 
-	private void OnKeyUp(object sender, KeyEventArgs e)
+	private void OnTick(object? sender, EventArgs e)
 	{
-		switch (e.KeyCode)
-		{}
-	}
-
-	private void OnTick(object sender, EventArgs e)
-	{
-		_menu.HideInfo();
-		_move = "";
 		_timer.Stop();
+
+		try
+		{
+			_player.Fight(_enemy, _move);
+		}
+		catch
+		{
+			_player.Health -= 10;
+		}
+
+		if (_enemy.Health <= 0)
+		{
+			MessageBox.Show("win");
+			Close();
+		}
+
+		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
+
+		_move = "";
+		_menu.HideInfo();
+
+		_player.OnEndTurn();
+
+		EnemyTurn();
 	}
 }
