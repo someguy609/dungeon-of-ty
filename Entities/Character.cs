@@ -58,16 +58,7 @@ public abstract class Character
 
 	public virtual void OnEndTurn() { }
 
-	public void Fight(Character target, string? move = null)
-	{
-		if (string.IsNullOrEmpty(move))
-		{
-			Moves.ElementAt(_random.Next(0, Moves.Count)).Value.Execute(this, target);
-			return;
-		}
-
-		Moves[move].Execute(this, target);
-	}
+	public abstract void Fight(Character target, string? move = null);
 
 	public bool Flee()
 	{

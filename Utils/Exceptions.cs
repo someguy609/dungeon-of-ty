@@ -34,3 +34,8 @@ public class NegativeDefenseException : NegativeNumberException
 {
 	public NegativeDefenseException() : base("Defense") {}
 }
+
+public class MoveNotFoundException : Exception
+{
+	public MoveNotFoundException() : base("Move not found") {}
+}
