@@ -4,6 +4,7 @@ public class Menu : Panel
 {
 	private FlowLayoutPanel _buttonsPanel;
 	private Label _infoLabel;
+	private Label _inputLabel;
 	public Button FightButton, InventoryButton, FleeButton;
 
 	public Menu()
@@ -56,6 +57,15 @@ public class Menu : Panel
 			Height = 125,
 		};
 
+		_inputLabel = new Label {
+			TextAlign = ContentAlignment.MiddleCenter,
+			AutoSize = false,
+			Anchor = AnchorStyles.None,
+			Visible = false,
+			Width = 750,
+			Height = 125,
+		};
+
 		Controls.Add(_buttonsPanel);
 		Controls.Add(_infoLabel);
 	}
@@ -72,6 +82,11 @@ public class Menu : Panel
 		_infoLabel.Location = new Point(
 			(Width - _infoLabel.Width) / 2,
 			(Height - _infoLabel.Height) / 2
+		);
+
+		_inputLabel.Location = new Point(
+			(Width - _inputLabel.Width) / 2,
+			(Height - _inputLabel.Height) / 2
 		);
     }
 
