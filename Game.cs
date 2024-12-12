@@ -36,6 +36,9 @@ public partial class Game : Panel
 		_menu.FightButton.Click += (s, e) =>
 		{
 			Focus();
+			_menu.HideButtons();
+			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
+			_menu.ShowInput("", Color.GreenYellow);
 			_timer.Start();
 		};
 
@@ -67,9 +70,11 @@ public partial class Game : Panel
 
 	private void PlayerTurn()
 	{
-		_player.OnStartTurn();
-		_player.GetNewMove();
-		_menu.HideInfo();
+		_player.OnStartTurn(); // apply buffs
+		_player.GetNewMove(); // get word
+		_menu.HideInfo(); // show buttons only
+		_menu.HideInput();
+		_menu.ShowButtons(); 
 	}
 
 	private void EnemyTurn()
@@ -92,28 +97,29 @@ public partial class Game : Panel
 
 	private void OnKeyDown(object? sender, KeyEventArgs e)
 	{
-		if (!_timer.Enabled)
+		if (!_timer.Enabled) // if not player turn
 			return;
 
-		char c = (char)e.KeyValue;
+		char c = (char)e.KeyValue; // get input
 
-		if (c == (char)Keys.Back)
+		if (c == (char)Keys.Back && _move.Length > 0) // backspace
 			_move = _move[..^1];
-		else if (char.IsLetterOrDigit(c))
+		else if (char.IsLetterOrDigit(c)) // input
 			_move += char.ToLower(c);
+		_menu.HideInfo();
+		_menu.ShowInput(_move, Color.GreenYellow); // show current input
 
-		if (_move == _player.MoveKey)
+		if (_move == _player.MoveKey) // if word match
 		{ 
-			_player.Fight(_enemy);
+			_player.Fight(_enemy); // attack
 			_move = "";
+			// PlayerTurn(); // simulate click
 		}
-
-		_menu.ShowInfo(_move);
 	}
 
 	private void OnTick(object? sender, EventArgs e)
 	{
-		_timer.Stop();
+		_timer.Stop(); // enemy turn
 
 		if (_enemy.Health <= 0)
 		{
@@ -125,6 +131,8 @@ public partial class Game : Panel
 
 		_move = "";
 		_menu.HideInfo();
+		_menu.HideInput();
+		_menu.ShowButtons();
 
 		_player.OnEndTurn();
 

@@ -55,6 +55,7 @@ public class Menu : Panel
 			Visible = false,
 			Width = 750,
 			Height = 125,
+			BackColor = Color.Transparent,
 		};
 
 		_inputLabel = new Label {
@@ -64,10 +65,14 @@ public class Menu : Panel
 			Visible = false,
 			Width = 750,
 			Height = 125,
+			BackColor = Color.Transparent,
 		};
+
+		_inputLabel.BringToFront();
 
 		Controls.Add(_buttonsPanel);
 		Controls.Add(_infoLabel);
+		Controls.Add(_inputLabel);
 	}
 
     protected override void OnResize(EventArgs e)
@@ -90,18 +95,35 @@ public class Menu : Panel
 		);
     }
 
-	public void ShowInfo(string info = "")
-	{
-		_buttonsPanel.Hide();
+	public void ShowButtons() {
+		_buttonsPanel.Show();
+	}
 
+	public void ShowInfo(string info = "", Color? textColor = null) // attacking, fleeing
+	{
 		_infoLabel.Text = info;
+		_infoLabel.ForeColor = textColor ?? Color.Black;
 		_infoLabel.Show();
+	}
+
+	public void ShowInput(string input = "", Color? textColor = null) // input
+	{
+		_inputLabel.Text = input;
+		
+		_inputLabel.Show();
+	}
+
+	public void HideButtons() {
+		_buttonsPanel.Hide();
 	}
 
 	public void HideInfo()
 	{
 		_infoLabel.Hide();
-		_buttonsPanel.Show();
+	}
+
+	public void HideInput() {
+		_inputLabel.Hide();
 	}
 
     private void FightButton_Click(object ?sender, EventArgs e)
