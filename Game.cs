@@ -1,6 +1,6 @@
 namespace dungeon_of_ty;
 
-public partial class Game : Form
+public partial class Game : Panel
 {
 	private Display _display;
 	private Menu _menu; // mending di satuin di game kah?
@@ -13,7 +13,7 @@ public partial class Game : Form
 	{
 		Text = "Dungeon Of Ty";
 		MinimumSize = new Size(800, 600);
-		StartPosition = FormStartPosition.CenterScreen;
+		Dock = DockStyle.Fill;
 
 		_player = new Player("Player", 100, 20, 100, 0.1);
 		_enemy = new Enemy("Enemy", 100, 20, 30, 0.1);
@@ -44,7 +44,7 @@ public partial class Game : Form
 			if (_player.Flee())
 			{ 
 				MessageBox.Show("fled"); 
-				Close();
+				Application.Exit();
 			}
 			else
 				MessageBox.Show("failed to flee");
@@ -79,7 +79,7 @@ public partial class Game : Form
 		if (_player.Health <= 0)
 		{
 			MessageBox.Show("lost");
-			Close();
+			Application.Exit();
 		}
 
 		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
@@ -96,7 +96,9 @@ public partial class Game : Form
 
 		char c = (char)e.KeyValue;
 
-		if (char.IsLetterOrDigit(c))
+		if (c == (char)Keys.Back)
+			_move = _move[..^1];
+		else if (char.IsLetterOrDigit(c))
 			_move += char.ToLower(c);
 
 		_menu.ShowInfo(_move);
@@ -118,7 +120,7 @@ public partial class Game : Form
 		if (_enemy.Health <= 0)
 		{
 			MessageBox.Show("win");
-			Close();
+			Application.Exit();
 		}
 
 		MessageBox.Show($"Player health: {_player.Health}\nEnemy health: {_enemy.Health}");
