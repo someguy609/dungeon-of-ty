@@ -38,6 +38,8 @@ public partial class Game : Panel
 			_menu.HideButtons();
 			Type();
 			Focus();
+
+			// perlu refactor lagi liatin apa yg sebenarnya diperlukan
 			_menu.ShowInfo(_player.MoveKey ?? string.Empty, Color.DarkGray);
 			_menu.ShowInput("", Color.GreenYellow);
 			_timer.Start();
