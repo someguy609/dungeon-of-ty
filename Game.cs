@@ -34,10 +34,11 @@ public partial class Game : Panel
 		};
 
 		_menu.FightButton.Click += (s, e) =>
-		{
-			Focus();
+		{ //  mending kita modularize typing to get integer of performance
 			_menu.HideButtons();
-			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
+			Type();
+			Focus();
+			_menu.ShowInfo(_player.MoveKey ?? string.Empty, Color.DarkGray);
 			_menu.ShowInput("", Color.GreenYellow);
 			_timer.Start();
 		};
@@ -95,6 +96,24 @@ public partial class Game : Panel
 		PlayerTurn();
 	}
 
+	private int Type() {
+		/*
+		 * 1. fetch new word
+		 * 2. display word to infoLabel
+		 * 3. Focus and listen to keydown event
+		 * 4. if word match, fetch new word and repeat
+		 * 5. if time runs out, return word count with some calculation
+		*/
+		// mending di player ada atribut wordCount
+		int wordCount = 0;
+		_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
+		_menu.ShowInput("", Color.GreenYellow);
+		// function OnKeyDown is here
+		if (!_timer.Enabled) // if not player turn
+			return wordCount;
+		return wordCount;
+	}
+
 	private void OnKeyDown(object? sender, KeyEventArgs e)
 	{
 		if (!_timer.Enabled) // if not player turn
@@ -113,6 +132,16 @@ public partial class Game : Panel
 		{ 
 			_player.Fight(_enemy); // attack
 			_move = "";
+			_player.WordCount++;
+
+			// need to modularize this
+			// perlu coyote time jg buat setelah ketik input, -
+			// itu reset new word nya ada delay
+			_player.GetNewMove();
+			_menu.HideInfo();
+			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
+			_menu.ShowInput("", Color.GreenYellow);
+			Type(); // typing again
 			// PlayerTurn(); // simulate click
 		}
 	}

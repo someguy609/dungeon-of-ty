@@ -2,8 +2,14 @@ namespace dungeon_of_ty;
 
 public class Player : Character
 {
-    private Move _currentMove;
-    public string MoveKey { get; private set; }
+    private Move? _currentMove;
+    private int _wordCount = 0;
+    public string? MoveKey { get; private set; }
+    public int WordCount
+    {
+        get { return _wordCount; }
+        set { _wordCount = value; }
+    }
 
 	public Player(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck) 
     {
@@ -27,7 +33,7 @@ public class Player : Character
 
     public override void Fight(Character target)
     {
-        _currentMove.Execute(this, target);
+        _currentMove?.Execute(this, target); // null forgiving di sini itu emg bisa kek gmn dah?
         GetNewMove();
     }
 

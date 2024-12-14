@@ -99,9 +99,9 @@ public class Menu : Panel
 		_buttonsPanel.Show();
 	}
 
-	public void ShowInfo(string info = "", Color? textColor = null) // attacking, fleeing
+	public void ShowInfo(string? info = "", Color? textColor = null) // attacking, fleeing
 	{
-		_infoLabel.Text = info;
+		_infoLabel.Text = info ?? "";
 		_infoLabel.ForeColor = textColor ?? Color.Black;
 		_infoLabel.Show();
 	}
