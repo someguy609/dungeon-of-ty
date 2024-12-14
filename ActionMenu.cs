@@ -6,9 +6,12 @@ public class Menu : Panel
 	private Label _infoLabel;
 	private Label _inputLabel;
 	public Button FightButton, InventoryButton, FleeButton;
+	public TableLayoutPanel InventoryPanel;
 
 	public Menu()
 	{
+		Padding = new Padding(5);
+
 		_buttonsPanel = new FlowLayoutPanel
 		{
 			FlowDirection = FlowDirection.LeftToRight,
@@ -24,7 +27,6 @@ public class Menu : Panel
 			BackColor = Color.White,
 			TabStop = false,
 		};
-		FightButton.Click += new EventHandler(FightButton_Click);
 		_buttonsPanel.Controls.Add(FightButton);
 
 		InventoryButton = new Button
@@ -34,7 +36,6 @@ public class Menu : Panel
 			BackColor = Color.White,
 			TabStop = false,
 		};
-		InventoryButton.Click += new EventHandler(InventoryButton_Click);
 		_buttonsPanel.Controls.Add(InventoryButton);
 
 		FleeButton = new Button
@@ -44,40 +45,49 @@ public class Menu : Panel
 			BackColor = Color.White,
 			TabStop = false,
 		};
-		FleeButton.Click += new EventHandler(FleeButton_Click);
 		_buttonsPanel.Controls.Add(FleeButton);
+
+		InventoryPanel = new TableLayoutPanel
+		{
+			Dock = DockStyle.Fill,
+			ColumnCount = 2,
+			Visible = false,
+		};
+		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+		// butuh back button kah?
 
 		_infoLabel = new Label
 		{
+			Dock = DockStyle.Fill,
+			Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
 			TextAlign = ContentAlignment.MiddleCenter,
 			AutoSize = false,
-			Anchor = AnchorStyles.None,
 			Visible = false,
-			Width = 750,
-			Height = 125,
 			BackColor = Color.Transparent,
 		};
 
-		_inputLabel = new Label {
+		_inputLabel = new Label
+		{
+			Dock = DockStyle.Fill,
+			Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
 			TextAlign = ContentAlignment.MiddleCenter,
 			AutoSize = false,
-			Anchor = AnchorStyles.None,
 			Visible = false,
-			Width = 750,
-			Height = 125,
 			BackColor = Color.Transparent,
 		};
 
 		_inputLabel.BringToFront();
 
 		Controls.Add(_buttonsPanel);
+		Controls.Add(InventoryPanel);
 		Controls.Add(_infoLabel);
 		Controls.Add(_inputLabel);
 	}
 
-    protected override void OnResize(EventArgs e)
-    {
-        base.OnResize(e);
+	protected override void OnResize(EventArgs e)
+	{
+		base.OnResize(e);
 
 		_buttonsPanel.Location = new Point(
 			(Width - _buttonsPanel.Width) / 2,
@@ -93,9 +103,10 @@ public class Menu : Panel
 			(Width - _inputLabel.Width) / 2,
 			(Height - _inputLabel.Height) / 2
 		);
-    }
+	}
 
-	public void ShowButtons() {
+	public void ShowButtons()
+	{
 		_buttonsPanel.Show();
 	}
 
@@ -109,11 +120,11 @@ public class Menu : Panel
 	public void ShowInput(string input = "", Color? textColor = null) // input
 	{
 		_inputLabel.Text = input;
-		
 		_inputLabel.Show();
 	}
 
-	public void HideButtons() {
+	public void HideButtons()
+	{
 		_buttonsPanel.Hide();
 	}
 
@@ -122,24 +133,41 @@ public class Menu : Panel
 		_infoLabel.Hide();
 	}
 
-	public void HideInput() {
+	public void HideInput()
+	{
 		_inputLabel.Hide();
 	}
 
-    private void FightButton_Click(object ?sender, EventArgs e)
-	{ 
-		ShowInfo();
+	public void InitializeInventory(Player player)
+	{
+		foreach (Item item in player.Inventory.Items)
+		{
+			Button itemButton = new Button
+			{
+				Text = item.Name,
+				Dock = DockStyle.Fill,
+				Height = 50,
+			};
+
+			itemButton.Click += (s, e) =>
+			{
+				player.Inventory.UseItem(player, item);
+				HideInventory();
+				ShowButtons();
+				InventoryPanel.Controls.Remove(itemButton);
+			};
+
+			InventoryPanel.Controls.Add(itemButton);
+		}
 	}
 
-	private void InventoryButton_Click(object ?sender, EventArgs e)
-	{ 
-		// show inventory list
-		// ShowInfo("inventory");
+	public void HideInventory()
+	{
+		InventoryPanel.Hide();
 	}
 
-	private void FleeButton_Click(object ?sender, EventArgs e)
-	{ 
-		// show flee screen idk
-		// ShowInfo("flee");
+	public void ShowInventory()
+	{
+		InventoryPanel.Show();
 	}
 }

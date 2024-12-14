@@ -43,6 +43,16 @@ public partial class Game : Panel
 			_timer.Start();
 		};
 
+		_menu.InitializeInventory(_player);
+
+		foreach (Button itemButton in _menu.InventoryPanel.Controls)
+			itemButton.Click += (s, e) => EnemyTurn();
+
+		_menu.InventoryButton.Click += (s, e) => {
+			_menu.HideButtons();
+			_menu.ShowInventory();
+		};
+
 		_menu.FleeButton.Click += (s, e) =>
 		{
 			if (_player.Flee())
@@ -56,7 +66,7 @@ public partial class Game : Panel
 
 		Controls.Add(_menu);
 
-		_display = new Display(_player.GetRenderedItems(), _enemy.GetRenderedItems())
+		_display = new Display(_player.Sprite, _enemy.Sprite)
 		{
 			Dock = DockStyle.Top,
 			Height = 450,

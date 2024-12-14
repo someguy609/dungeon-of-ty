@@ -15,8 +15,12 @@ public class Player : Character
     {
         Moves.Add(new Punch());
         Moves.Add(new Kick());
+        Inventory.Add(new RedSauce());
+        Inventory.Add(new RedSauce());
+        Inventory.Add(new RedSauce());
+        Inventory.Add(new RedSauce());
 
-        _sprite = new PictureBox
+        Sprite = new PictureBox
         {
             Dock = DockStyle.Bottom,
             Anchor = AnchorStyles.Bottom,
@@ -35,14 +39,5 @@ public class Player : Character
     {
         _currentMove?.Execute(this, target); // null forgiving di sini itu emg bisa kek gmn dah?
         GetNewMove();
-    }
-
-    public void Learn()
-	{
-	}
-
-    public override Control GetRenderedItems()
-    {
-        return _sprite; // TODO
     }
 }
