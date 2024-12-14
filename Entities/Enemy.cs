@@ -14,13 +14,13 @@ public class Enemy : Character
 	{
 		Moves.Add(new Kick());
 
-		_state = EnemyState.AGGRESSIVE;
-
-		_sprite = new PictureBox
+		Sprite = new PictureBox
 		{
 			Size = new Size(100, 100),
 			BackColor = Color.Gray,
 		};
+
+		_state = EnemyState.AGGRESSIVE;
 	}
 
     public override void Fight(Character target)
@@ -46,10 +46,5 @@ public class Enemy : Character
 				if (Flee()) Health = 0; // for now
 				break;
 		}
-	}
-
-	public override Control GetRenderedItems()
-	{
-		return _sprite; // TODO
 	}
 }

@@ -4,6 +4,7 @@ public abstract class Buff
 {
 	public readonly string Name;
 	public readonly string Description;
+	public readonly PictureBox Sprite;
 
 	public abstract void Trigger(Character target);
 

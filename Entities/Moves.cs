@@ -3,8 +3,7 @@ namespace dungeon_of_ty;
 public abstract class Move
 {
 	protected static Random _random = new();
-
-	protected static readonly List<string> Words = new() { "punch", "kick", "talk", "walk", "should", "would", "could", "slap", "trap", "nap", "sap" };
+	protected static readonly List<string> Words = new() { "punch", "kick", "talk", "walk", "should", "would", "could", "slap", "trap", "nap", "sap", "aardvark", "tomb" };
 
 	public readonly string Name;
 	public readonly string Description;
