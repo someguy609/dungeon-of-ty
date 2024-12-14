@@ -30,11 +30,6 @@ public class NegativeAttackException : NegativeNumberException
 	public NegativeAttackException() : base("Attack") {}
 }
 
-public class NegativeDefenseException : NegativeNumberException
-{
-	public NegativeDefenseException() : base("Defense") {}
-}
-
 public class InventoryCapacityExceededException : Exception
 {
 	public InventoryCapacityExceededException() : base("Inventory capacity exceeded") {}
