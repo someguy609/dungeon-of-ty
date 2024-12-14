@@ -4,6 +4,7 @@ public abstract class Item
 {
 	public readonly string Name;
 	public readonly string Description;
+	public readonly PictureBox Sprite;
 
 	public abstract void Use(Character target);
 
@@ -27,7 +28,7 @@ public class Inventory
 	public void Add(Item item)
 	{
 		if (Items.Count + 1 > Capacity)
-			throw new Exception("Inventory capacity exceeded");
+			throw new InventoryCapacityExceededException();
 		
 		Items.Add(item);
 	}
@@ -35,15 +36,16 @@ public class Inventory
 	public void Add(Item item, int amount)
 	{
 		if (Items.Count + amount > Capacity)
-			throw new Exception("Inventory capacity exceeded");
+			throw new InventoryCapacityExceededException();
 		
 		while (amount-- > 0)
 			Items.Add(item);
 	}
 
-	public void UseItem(Item item)
+	public void UseItem(Character target, Item item)
 	{
-		Items.Remove(item); // for now
+		item.Use(target);
+		Items.Remove(item);
 	}
 
 	public Inventory(int capacity = 10)
@@ -58,6 +60,6 @@ public class RedSauce : Item
 
     public override void Use(Character target)
     {
-		target.Health += 10; // might need to change this
+		target.Health += 100; // might need to change this
 	}
 }

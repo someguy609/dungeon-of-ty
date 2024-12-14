@@ -3,7 +3,7 @@ namespace dungeon_of_ty;
 public abstract class Character
 {
 	protected static Random _random = new();
-	protected PictureBox _sprite;
+	public PictureBox Sprite;
 
 	private int _health = 100;
 
@@ -38,8 +38,6 @@ public abstract class Character
 		Defense = defense;
 		Luck = luck;
 	}
-
-	public abstract Control GetRenderedItems();
 
 	public void OnStartTurn()
 	{
