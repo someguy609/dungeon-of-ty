@@ -140,6 +140,8 @@ public class Menu : Panel
 
 	public void InitializeInventory(Player player)
 	{
+		InventoryPanel.Controls.Clear();
+
 		foreach (Item item in player.Inventory.Items)
 		{
 			Button itemButton = new Button
@@ -151,9 +153,7 @@ public class Menu : Panel
 
 			itemButton.Click += (s, e) =>
 			{
-				player.Inventory.UseItem(player, item);
-				HideInventory();
-				ShowButtons();
+				player.SelectedItem = item;
 				InventoryPanel.Controls.Remove(itemButton);
 			};
 

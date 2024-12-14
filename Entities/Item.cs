@@ -4,9 +4,9 @@ public abstract class Item
 {
 	public readonly string Name;
 	public readonly string Description;
-	public readonly PictureBox Sprite;
+	public readonly PictureBox? Sprite;
 
-	public abstract void Use(Character target);
+	public abstract void Use(Character target, int wordCount);
 
 	public Item(string name, string description)
 	{
@@ -42,9 +42,9 @@ public class Inventory
 			Items.Add(item);
 	}
 
-	public void UseItem(Character target, Item item)
+	public void UseItem(Character target, Item item, int wordCount)
 	{
-		item.Use(target);
+		item.Use(target, wordCount);
 		Items.Remove(item);
 	}
 
@@ -58,8 +58,31 @@ public class RedSauce : Item
 {
 	public RedSauce() : base("Red Sauce", "This bland sauce somehow heals people") {}
 
-    public override void Use(Character target)
+    public override void Use(Character target, int wordCount)
     {
-		target.Health += 100; // might need to change this
+		target.Health += 10 + (int)Math.Floor(wordCount * (target.Luck + 1));
 	}
+}
+
+public class KarateManual : Item
+{
+	public KarateManual() : base("Karate Manual", "Yeah apparently someone made a manual about this") {}
+
+    public override void Use(Character target, int wordCount)
+    {
+		target.Attack += 10 + (int)Math.Floor(wordCount * (target.Luck + 1));
+    }
+}
+
+public class MildMender : Item
+{
+	public MildMender() : base("", "") {}
+
+    public override void Use(Character target, int wordCount)
+    {
+		target.Buffs.Add(new Regenerating((int)Math.Max(
+			1, 
+			Math.Ceiling(wordCount * (target.Luck + 1))
+		)));
+    }
 }

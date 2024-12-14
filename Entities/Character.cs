@@ -3,7 +3,7 @@ namespace dungeon_of_ty;
 public abstract class Character
 {
 	protected static Random _random = new();
-	public PictureBox Sprite;
+	public PictureBox? Sprite;
 
 	private int _health = 100;
 
@@ -15,13 +15,11 @@ public abstract class Character
 	}
 	public int MaxHealth { get; set; } = 100;
 	public int Attack { get; set; } = 100;
-	public int Defense { get; set; } = 100;
 	public double Luck { get; set; } = 0.1;
 	public Inventory Inventory = new();
-	public List<Move> Moves = new();
 	public List<Buff> Buffs = new();
 
-	public Character(string name, int health, int attack, int defense, double luck)
+	public Character(string name, int health, int attack, double luck)
 	{
 		if (string.IsNullOrEmpty(name))
 			throw new EmptyNameException();
@@ -29,13 +27,10 @@ public abstract class Character
 			throw new NegativeHealthException();
 		if (attack < 0)
 			throw new NegativeAttackException();
-		if (defense < 0)
-			throw new NegativeDefenseException();
 
 		Name = name;
 		Health = health;
 		Attack = attack;
-		Defense = defense;
 		Luck = luck;
 	}
 
@@ -55,9 +50,12 @@ public abstract class Character
 		}
 	}
 
-	public virtual void OnEndTurn() { }
-
 	public abstract void Fight(Character target);
+
+	public void UseItem(Item item, int wordCount)
+	{
+		Inventory.UseItem(this, item, wordCount);
+	}
 
 	public bool Flee()
 	{
