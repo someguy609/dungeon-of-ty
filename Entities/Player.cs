@@ -1,24 +1,27 @@
 namespace dungeon_of_ty;
 
+public enum PlayerState
+{
+    ATTACKING,
+    USING_ITEM,
+    FLEEING,
+};
+
 public class Player : Character
 {
-    private Move? _currentMove;
     private int _wordCount = 0;
-    public string? MoveKey { get; private set; }
+    public string MoveKey { get; private set; } = "";
     public int WordCount
     {
         get { return _wordCount; }
         set { _wordCount = value; }
     }
+    public Item? SelectedItem;
+    public PlayerState? State;
 
-	public Player(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck) 
+	public Player(string name, int health, int attack, double luck) : base(name, health, attack, luck) 
     {
-        Moves.Add(new Punch());
-        Moves.Add(new Kick());
-        Inventory.Add(new RedSauce());
-        Inventory.Add(new RedSauce());
-        Inventory.Add(new RedSauce());
-        Inventory.Add(new RedSauce());
+        Inventory.Add(new RedSauce(), 4);
 
         Sprite = new PictureBox
         {
@@ -31,13 +34,12 @@ public class Player : Character
 
     public void GetNewMove() 
     {
-        _currentMove = Moves[_random.Next(0, Moves.Count)];
-        MoveKey = Move.GetWord();
+        MoveKey = Vocabulary.GetWord();
     }
 
     public override void Fight(Character target)
     {
-        _currentMove?.Execute(this, target); // null forgiving di sini itu emg bisa kek gmn dah?
-        GetNewMove();
+        target.Health -= Attack + (int)Math.Floor(WordCount * (1 + Luck));
+        WordCount = 0;
     }
 }

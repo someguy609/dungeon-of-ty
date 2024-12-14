@@ -10,10 +10,8 @@ public class Enemy : Character
 {
 	private EnemyState _state;
 	
-	public Enemy(string name, int health, int attack, int defense, double luck) : base(name, health, attack, defense, luck)
+	public Enemy(string name, int health, int attack, double luck) : base(name, health, attack, luck)
 	{
-		Moves.Add(new Kick());
-
 		Sprite = new PictureBox
 		{
 			Size = new Size(100, 100),
@@ -25,7 +23,7 @@ public class Enemy : Character
 
     public override void Fight(Character target)
     {
-		Moves.ElementAt(_random.Next(0, Moves.Count)).Execute(this, target);
+		target.Health -= Attack + (int)Math.Ceiling(_random.Next(Vocabulary.Words.Count) * (1 + Luck));
     }
 
     public void Update()
@@ -46,5 +44,12 @@ public class Enemy : Character
 				if (Flee()) Health = 0; // for now
 				break;
 		}
+	}
+
+	public Item? DropItem()
+	{
+		if (Inventory.Items.Count == 0)
+			return null;
+		return Inventory.Items[_random.Next(Inventory.Items.Count)];
 	}
 }
