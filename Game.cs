@@ -6,8 +6,12 @@ public partial class Game : Panel
 	private Menu _menu; // mending di satuin di game kah?
 	private Player _player;
 	private Enemy _enemy;
+	private List<Enemy> _enemies = new()
+	{
+	};
 	private System.Windows.Forms.Timer _timer;
 	private string _move = "";
+	private bool typing = false;
 
 	public Game()
 	{
@@ -15,8 +19,8 @@ public partial class Game : Panel
 		MinimumSize = new Size(800, 600);
 		Dock = DockStyle.Fill;
 
-		_player = new Player("Player", 100, 20, 100, 0.1);
-		_enemy = new Enemy("Enemy", 100, 20, 30, 0.1);
+		_player = new Player("Player", 100, 5, 0.1);
+		_enemy = new Enemy("Enemy", 100, 5, 0.1);
 
 		_timer = new System.Windows.Forms.Timer
 		{
@@ -35,22 +39,29 @@ public partial class Game : Panel
 
 		_menu.FightButton.Click += (s, e) =>
 		{ //  mending kita modularize typing to get integer of performance
+			_player.State = PlayerState.ATTACKING;
 			_menu.HideButtons();
-			Type();
 			Focus();
-
-			// perlu refactor lagi liatin apa yg sebenarnya diperlukan
-			_menu.ShowInfo(_player.MoveKey ?? string.Empty, Color.DarkGray);
-			_menu.ShowInput("", Color.GreenYellow);
+			Type();
 			_timer.Start();
 		};
 
 		_menu.InitializeInventory(_player);
 
 		foreach (Button itemButton in _menu.InventoryPanel.Controls)
-			itemButton.Click += (s, e) => EnemyTurn();
+		{
+			itemButton.Click += (s, e) =>
+			{
+				_player.State = PlayerState.USING_ITEM;
+				_menu.HideInventory();
+				Focus();
+				Type();
+				_timer.Start();
+			};
+		}
 
-		_menu.InventoryButton.Click += (s, e) => {
+		_menu.InventoryButton.Click += (s, e) =>
+		{
 			_menu.HideButtons();
 			_menu.ShowInventory();
 		};
@@ -87,7 +98,7 @@ public partial class Game : Panel
 		_player.GetNewMove(); // get word
 		_menu.HideInfo(); // show buttons only
 		_menu.HideInput();
-		_menu.ShowButtons(); 
+		_menu.ShowButtons();
 	}
 
 	private void EnemyTurn()
@@ -103,12 +114,11 @@ public partial class Game : Panel
 
 		MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
-		_enemy.OnEndTurn();
-
 		PlayerTurn();
 	}
 
-	private int Type() {
+	private void Type()
+	{
 		/*
 		 * 1. fetch new word
 		 * 2. display word to infoLabel
@@ -116,19 +126,14 @@ public partial class Game : Panel
 		 * 4. if word match, fetch new word and repeat
 		 * 5. if time runs out, return word count with some calculation
 		*/
-		// mending di player ada atribut wordCount
-		int wordCount = 0;
 		_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
 		_menu.ShowInput("", Color.GreenYellow);
-		// function OnKeyDown is here
-		if (!_timer.Enabled) // if not player turn
-			return wordCount;
-		return wordCount;
+		typing = true;
 	}
 
 	private void OnKeyDown(object? sender, KeyEventArgs e)
 	{
-		if (!_timer.Enabled) // if not player turn
+		if (!typing) // if not player turn
 			return;
 
 		char c = (char)e.KeyValue; // get input
@@ -141,8 +146,8 @@ public partial class Game : Panel
 		_menu.ShowInput(_move, Color.GreenYellow); // show current input
 
 		if (_move == _player.MoveKey) // if word match
-		{ 
-			_player.Fight(_enemy); // attack
+		{
+			// _player.Fight(_enemy); // attack
 			_move = "";
 			_player.WordCount++;
 
@@ -150,20 +155,36 @@ public partial class Game : Panel
 			// perlu coyote time jg buat setelah ketik input, -
 			// itu reset new word nya ada delay
 			_player.GetNewMove();
-			_menu.HideInfo();
-			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
-			_menu.ShowInput("", Color.GreenYellow);
+			// _menu.HideInfo();
+			// _menu.ShowInfo(_player.MoveKey, Color.DarkGray);
+			// _menu.ShowInput("", Color.GreenYellow);
 			Type(); // typing again
-			// PlayerTurn(); // simulate click
+					// PlayerTurn(); // simulate click
 		}
 	}
 
 	private void OnTick(object? sender, EventArgs e)
 	{
 		_timer.Stop(); // enemy turn
+		typing = false;
+
+		switch (_player.State)
+		{
+			case PlayerState.ATTACKING:
+				_player.Fight(_enemy);
+				break;
+			case PlayerState.USING_ITEM:
+				_player.UseItem(_player.SelectedItem, _player.WordCount);
+				break;
+		}
 
 		if (_enemy.Health <= 0)
 		{
+			Item? dropped_item = _enemy.DropItem();
+
+			if (dropped_item != null)
+				_player.Inventory.Add(dropped_item);
+			
 			MessageBox.Show("win");
 			Application.Exit();
 		}
@@ -171,11 +192,10 @@ public partial class Game : Panel
 		MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
 		_move = "";
+		_player.WordCount = 0;
 		_menu.HideInfo();
 		_menu.HideInput();
 		_menu.ShowButtons();
-
-		_player.OnEndTurn();
 
 		EnemyTurn();
 	}
