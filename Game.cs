@@ -68,13 +68,11 @@ public partial class Game : Panel
 
 		_menu.FleeButton.Click += (s, e) =>
 		{
-			if (_player.Flee())
-			{
-				MessageBox.Show("fled");
-				Application.Exit();
-			}
-			else
-				MessageBox.Show("failed to flee");
+			_player.State = PlayerState.FLEEING;
+			_menu.HideButtons();
+			Focus();
+			Type();
+			_timer.Start();
 		};
 
 		Controls.Add(_menu);
@@ -175,6 +173,12 @@ public partial class Game : Panel
 				break;
 			case PlayerState.USING_ITEM:
 				_player.UseItem(_player.SelectedItem, _player.WordCount);
+				break;
+			case PlayerState.FLEEING:
+				if (_player.Flee(_player.WordCount))
+					MessageBox.Show("Player fled");
+				else
+					MessageBox.Show("Player failed to flee");
 				break;
 		}
 

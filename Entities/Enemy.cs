@@ -41,7 +41,7 @@ public class Enemy : Character
 				Fight(player);
 				break;
 			case EnemyState.DEFENSIVE:
-				if (Flee()) Health = 0; // for now
+				if (Flee(_random.Next(Vocabulary.Words.Count))) Health = 0; // for now
 				break;
 		}
 	}

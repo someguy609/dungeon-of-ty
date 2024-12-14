@@ -57,8 +57,8 @@ public abstract class Character
 		Inventory.UseItem(this, item, wordCount);
 	}
 
-	public bool Flee()
+	public bool Flee(int wordCount)
 	{
-		return Luck > _random.NextDouble();
+		return (Luck + (double)(wordCount) / 100) > _random.NextDouble();
 	}
 }
