@@ -2,17 +2,16 @@ namespace dungeon_of_ty;
 
 public partial class Game : Panel
 {
+	private MainForm _mainForm;
 	private Display _display;
 	private Menu _menu; // mending di satuin di game kah?
 	private Player _player;
 	private Enemy _enemy;
-	private MainForm _mainForm;
 	private List<Enemy> _enemies = new()
-	{
-		new Enemy("John Jones", 100, 2, 0.5),
-		new Enemy("John Tron", 200, 1, 0.1),
-		new Enemy("bean", 1000, 1000, 1)
-	};
+		{
+			new Napstablook(),
+			new Papyrus(),
+		};
 	private int _currentEnemy = 0;
 	private System.Windows.Forms.Timer _timer;
 	private string _move = "";
@@ -26,7 +25,7 @@ public partial class Game : Panel
 
 		_mainForm = mainForm;
 
-		_player = new Player("Player", 100, 100, 0.1);
+		_player = new Player("Player", 100, 10, 0.1);
 		_enemy = _enemies[_currentEnemy];
 
 		_timer = new System.Windows.Forms.Timer
@@ -39,7 +38,6 @@ public partial class Game : Panel
 		{
 			Dock = DockStyle.Bottom,
 			Height = 150,
-			Padding = new Padding(5),
 			BackColor = Color.AliceBlue,
 			Font = new Font("Arial", 14),
 		};
@@ -65,7 +63,7 @@ public partial class Game : Panel
 
 		_menu.InventoryButton.Click += (s, e) =>
 		{
-		_menu.HideButtons();
+			_menu.HideButtons();
 			_menu.ShowInventory();
 		};
 
@@ -73,22 +71,35 @@ public partial class Game : Panel
 		{
 			_player.State = PlayerState.FLEEING;
 			_menu.HideButtons();
-			_menu.StartCountdown(_timer.Interval/1000);
+			_menu.ShowTimer(_timer.Interval / 1000);
 			StartTyping();
 		};
 
 		Controls.Add(_menu);
 
-		_display = new Display(_player.Sprite, _enemy.Sprite)
+		_display = new Display()
 		{
-			Dock = DockStyle.Top,
-			Height = 450,
+			Dock = DockStyle.Fill,
+			MinimumSize = new Size(800, 450),
 			TabStop = false,
 		};
-		Controls.Add(_display); // fix the resizing
-		// _mainForm.SwitchView(_display);
+		Controls.Add(_display);
 
 		KeyDown += new KeyEventHandler(OnKeyDown);
+
+		Reset();
+	}
+
+	public void Reset()
+	{
+		_player = new Player("Player", 100, 10, 0.1);
+
+		_currentEnemy = 0;
+		_enemy = _enemies[_currentEnemy];
+		_display.ChangeEnemy(_enemy.Render);
+
+		_move = "";
+		typing = false;
 
 		PlayerTurn();
 	}
@@ -128,7 +139,7 @@ public partial class Game : Panel
 	private void StartTyping()
 	{
 		_timer.Start();
-		_menu.StartCountdown(_timer.Interval / 1000);
+		_menu.ShowTimer(_timer.Interval / 1000);
 		Focus();
 		Type();
 	}
@@ -225,6 +236,7 @@ public partial class Game : Panel
 			}
 
 			_enemy = _enemies[_currentEnemy];
+			_display.ChangeEnemy(_enemy.Render);
 			MessageBox.Show("But new enemies have arrived!");
 
 			_timer.Stop();
@@ -234,7 +246,6 @@ public partial class Game : Panel
 			MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 			EnemyTurn();
 		}
-
 
 		_move = "";
 		_player.WordCount = 0;
