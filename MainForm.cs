@@ -2,8 +2,8 @@ namespace dungeon_of_ty;
 
 public class MainForm : Form {
     private Panel _contentPanel;
-    private Panel _mainMenuPanel;
-    private Panel _gamePanel;
+    private MainMenu _mainMenuPanel;
+    private Game _gamePanel;
 
     public MainForm() {
         Text = "Dungeon of Ty";
@@ -34,6 +34,7 @@ public class MainForm : Form {
     }
 
     public void SwitchToGame() {
+        _gamePanel.Reset();
         SwitchView(_gamePanel);
     }
 }
