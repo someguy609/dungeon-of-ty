@@ -43,7 +43,7 @@ public class Player : Character
 
     public override void Fight(Character target)
     {
-        target.Health -= Attack + (int)Math.Floor(WordCount * (1 + Luck)) + 90;
+        target.Health -= Attack + (int)Math.Floor(WordCount * (1 + Luck));
         WordCount = 0;
     }
 }

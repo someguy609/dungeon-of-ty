@@ -14,7 +14,8 @@ public static class Vocabulary
 		"should", "would", "could", "small",  "under", "water", 
 		//"where", "which", "while", "white", "large", 
 		"aardvark",
-		"serendipity", "supercalifragilisticexpialidocious" // we do some trolling
+		"serendipity",
+		"pneumonoultramicroscopicsilicovolcanoconiosis"
 	};
 
 	public static string GetWord() { return Words[_random.Next(Words.Count)]; }

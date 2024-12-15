@@ -9,7 +9,11 @@ public partial class Game : Panel
 	private MainForm _mainForm;
 	private List<Enemy> _enemies = new()
 	{
+		new Enemy("John Jones", 100, 2, 0.5),
+		new Enemy("John Tron", 200, 1, 0.1),
+		new Enemy("bean", 1000, 1000, 1)
 	};
+	private int _currentEnemy = 0;
 	private System.Windows.Forms.Timer _timer;
 	private string _move = "";
 	private bool typing = false;
@@ -22,8 +26,8 @@ public partial class Game : Panel
 
 		_mainForm = mainForm;
 
-		_player = new Player("Player", 100, 5, 0.1);
-		_enemy = new Enemy("Enemy", 100, 5, 0.1);
+		_player = new Player("Player", 100, 100, 0.1);
+		_enemy = _enemies[_currentEnemy];
 
 		_timer = new System.Windows.Forms.Timer
 		{
@@ -44,10 +48,7 @@ public partial class Game : Panel
 		{ //  mending kita modularize typing to get integer of performance
 			_player.State = PlayerState.ATTACKING;
 			_menu.HideButtons();
-			Focus();
-			Type();
-			_menu.StartCountdown(_timer.Interval/1000);
-			_timer.Start();
+			StartTyping();
 		};
 
 		_menu.InitializeInventory(_player);
@@ -58,10 +59,7 @@ public partial class Game : Panel
 			{
 				_player.State = PlayerState.USING_ITEM;
 				_menu.HideInventory();
-				Focus();
-				_menu.StartCountdown(_timer.Interval/1000);
-				Type();
-				_timer.Start();
+				StartTyping();
 			};
 		}
 
@@ -76,9 +74,7 @@ public partial class Game : Panel
 			_player.State = PlayerState.FLEEING;
 			_menu.HideButtons();
 			_menu.StartCountdown(_timer.Interval/1000);
-			Focus();
-			Type();
-			_timer.Start();
+			StartTyping();
 		};
 
 		Controls.Add(_menu);
@@ -117,17 +113,23 @@ public partial class Game : Panel
 			_player.WordCount = 0;
 			_move = "";
 			_timer.Stop();
-
-			MainMenu mainMenu = new MainMenu(_mainForm);
-			_mainForm.SwitchView(mainMenu);
-
-
-		} else {
+			_mainForm.SwitchToMenu();
+		}
+		else
+		{
 			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 		}
 
 
 		PlayerTurn();
+	}
+
+	private void StartTyping()
+	{
+		_timer.Start();
+		_menu.StartCountdown(_timer.Interval / 1000);
+		Focus();
+		Type();
 	}
 
 	private void Type()
@@ -174,7 +176,8 @@ public partial class Game : Panel
 			Type(); // typing again
 					// PlayerTurn(); // simulate click
 		}
-		if (_move == "") { // typed something but still empty string
+		if (_move == "")
+		{ // typed something but still empty string
 			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
 		}
 	}
@@ -207,18 +210,26 @@ public partial class Game : Panel
 
 			if (dropped_item != null)
 				_player.Inventory.Add(dropped_item);
-			
-			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {Math.Max(0, _enemy.Health)}");
+
+			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: 0");
 			MessageBox.Show("Enemy defeated!");
 
-			// seharusnya start new enemy
-			_enemy = new Enemy("Enemy", 100, 5, 0.1);
+			_currentEnemy++;
+
+			if (_currentEnemy >= _enemies.Count)
+			{
+				MessageBox.Show("Congrats, you won");
+				_mainForm.SwitchToMenu();
+				return;
+			}
+
+			_enemy = _enemies[_currentEnemy];
 			MessageBox.Show("But new enemies have arrived!");
 
-			// reset timer itu gw jujur kurang ngerti itu seharusnya kek gmn
 			_timer.Stop();
-			_timer.Start();
-		} else {
+		}
+		else
+		{
 			MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 			EnemyTurn();
 		}
@@ -230,6 +241,5 @@ public partial class Game : Panel
 		_menu.HideInput();
 		_menu.HideTimer();
 		_menu.ShowButtons();
-
 	}
 }

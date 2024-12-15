@@ -54,16 +54,16 @@ public class MainMenu : Panel , IButtonColor {
         ButtonFormat(_newGameButton);
         _newGameButton.Click += StartNewGame;
 
-        _loadGameButton = new Button {
-            Text = "Load Game",
-            ForeColor = Color.White,
-            Size = new Size(450, 150),
-            Location = new Point(575, 600), // ends in 750
-            BackColor = DefaultButtonColor,
-            TabStop = true,
-        };
-        ButtonFormat(_loadGameButton);
-        _loadGameButton.Click += LoadGame;
+        // _loadGameButton = new Button {
+        //     Text = "Load Game",
+        //     ForeColor = Color.White,
+        //     Size = new Size(450, 150),
+        //     Location = new Point(575, 600), // ends in 750
+        //     BackColor = DefaultButtonColor,
+        //     TabStop = true,
+        // };
+        // ButtonFormat(_loadGameButton);
+        // _loadGameButton.Click += LoadGame;
 
         _exitButton = new Button {
             Text = "Exit",
@@ -86,8 +86,7 @@ public class MainMenu : Panel , IButtonColor {
 
     // TODO: IMPLEMENT TO NEW GAME IN GAME CLASS
     private void StartNewGame(object? sender, EventArgs e) {
-        Game game = new Game(_mainForm);
-        _mainForm.SwitchView(game);
+        _mainForm.SwitchToGame();
     }
 
     public void LoadGame(object? sender, EventArgs e) {

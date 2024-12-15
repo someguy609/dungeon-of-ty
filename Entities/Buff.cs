@@ -4,7 +4,7 @@ public abstract class Buff
 {
 	public readonly string Name;
 	public readonly string Description;
-	public readonly PictureBox Sprite;
+	public readonly PictureBox? Sprite;
 
 	public abstract void Trigger(Character target);
 
@@ -35,16 +35,6 @@ public abstract class TemporaryBuff : Buff
 	{
 		_maxDuration = duration;
 		Duration = duration;
-	}
-}
-
-public class Burning : TemporaryBuff
-{
-	public Burning(int duration = 3) : base("Burn", "It burns", duration) { }
-
-	public override void Trigger(Character target)
-	{
-		target.Health -= 10;
 	}
 }
 

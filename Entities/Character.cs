@@ -59,6 +59,6 @@ public abstract class Character
 
 	public bool Flee(int wordCount)
 	{
-		return (Luck + (double)(wordCount) / 100) > _random.NextDouble();
+		return (Luck + wordCount / 100d) > _random.NextDouble();
 	}
 }
