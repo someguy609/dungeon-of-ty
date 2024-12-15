@@ -24,7 +24,7 @@ public partial class Game : Panel
 
 		_timer = new System.Windows.Forms.Timer
 		{
-			Interval = 3000
+			Interval = 10000
 		};
 		_timer.Tick += new EventHandler(OnTick);
 
@@ -108,9 +108,10 @@ public partial class Game : Panel
 		{
 			MessageBox.Show("lost");
 			Application.Exit();
+		} else {
+			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 		}
 
-		MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
 		PlayerTurn();
 	}
@@ -158,6 +159,9 @@ public partial class Game : Panel
 			// _menu.ShowInput("", Color.GreenYellow);
 			Type(); // typing again
 					// PlayerTurn(); // simulate click
+		}
+		if (_move == "") { // typed something but still empty string
+			_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
 		}
 	}
 

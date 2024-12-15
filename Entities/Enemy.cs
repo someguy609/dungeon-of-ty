@@ -22,7 +22,7 @@ public class Enemy : Character
 	}
 
     public override void Fight(Character target)
-    {
+    { // logika nya apa dah
 		target.Health -= Attack + (int)Math.Ceiling(_random.Next(Vocabulary.Words.Count) * (1 + Luck));
     }
 

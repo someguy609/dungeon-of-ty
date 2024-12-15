@@ -22,7 +22,9 @@ public class Player : Character
 	public Player(string name, int health, int attack, double luck) : base(name, health, attack, luck) 
     {
         Inventory.Add(new RedSauce(), 4);
-
+        
+        // player sebenarnya gk perlu sprite gk sih
+        // kan jg kita gk bakal liat :sob:
         Sprite = new PictureBox
         {
             Dock = DockStyle.Bottom,
@@ -34,7 +36,9 @@ public class Player : Character
 
     public void GetNewMove() 
     {
-        MoveKey = Vocabulary.GetWord();
+        string? prevMove = MoveKey;
+        while (MoveKey == prevMove)
+            MoveKey = Vocabulary.GetWord();
     }
 
     public override void Fight(Character target)
