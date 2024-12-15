@@ -31,7 +31,7 @@ public partial class Game : Panel
 
 		_timer = new System.Windows.Forms.Timer
 		{
-			Interval = 3000
+			Interval = 7000
 		};
 		_timer.Tick += new EventHandler(OnTick);
 
@@ -85,7 +85,8 @@ public partial class Game : Panel
 			Height = 450,
 			TabStop = false,
 		};
-		// Controls.Add(_display); // fix the resizing
+		Controls.Add(_display); // fix the resizing
+		// _mainForm.SwitchView(_display);
 
 		KeyDown += new KeyEventHandler(OnKeyDown);
 

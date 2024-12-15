@@ -7,6 +7,7 @@ public class MainForm : Form {
 
     public MainForm() {
         Text = "Dungeon of Ty";
+        MinimumSize = new Size(1200, 900);
         Size = new Size(1600, 1200);
         _contentPanel = new Panel {
             Dock = DockStyle.Fill
@@ -19,8 +20,11 @@ public class MainForm : Form {
         SwitchToMenu();
     }
 
-    public void SwitchView(Control newView) {
-        _contentPanel.Controls.Clear();
+    public void SwitchView(Control newView, bool? clear = true) {
+        if (clear.HasValue && clear.Value){
+            
+            _contentPanel.Controls.Clear();
+        }
         newView.Dock = DockStyle.Fill;
         _contentPanel.Controls.Add(newView);
     }
