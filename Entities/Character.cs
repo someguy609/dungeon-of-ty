@@ -3,7 +3,6 @@ namespace dungeon_of_ty;
 public abstract class Character
 {
 	protected static Random _random = new();
-	public PictureBox? Sprite;
 
 	private int _health = 100;
 
