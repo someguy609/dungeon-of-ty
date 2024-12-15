@@ -46,6 +46,7 @@ public partial class Game : Panel
 			_menu.HideButtons();
 			Focus();
 			Type();
+			_menu.StartCountdown(_timer.Interval/1000);
 			_timer.Start();
 		};
 
@@ -58,6 +59,7 @@ public partial class Game : Panel
 				_player.State = PlayerState.USING_ITEM;
 				_menu.HideInventory();
 				Focus();
+				_menu.StartCountdown(_timer.Interval/1000);
 				Type();
 				_timer.Start();
 			};
@@ -65,7 +67,7 @@ public partial class Game : Panel
 
 		_menu.InventoryButton.Click += (s, e) =>
 		{
-			_menu.HideButtons();
+		_menu.HideButtons();
 			_menu.ShowInventory();
 		};
 
@@ -73,6 +75,7 @@ public partial class Game : Panel
 		{
 			_player.State = PlayerState.FLEEING;
 			_menu.HideButtons();
+			_menu.StartCountdown(_timer.Interval/1000);
 			Focus();
 			Type();
 			_timer.Start();
@@ -86,7 +89,7 @@ public partial class Game : Panel
 			Height = 450,
 			TabStop = false,
 		};
-		Controls.Add(_display); // fix the resizing
+		// Controls.Add(_display); // fix the resizing
 
 		KeyDown += new KeyEventHandler(OnKeyDown);
 
@@ -138,7 +141,6 @@ public partial class Game : Panel
 		*/
 		_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
 		_menu.ShowInput("", Color.GreenYellow);
-		_menu.StartCountdown(3);
 		typing = true;
 	}
 
