@@ -6,6 +6,7 @@ public partial class Game : Panel
 	private Menu _menu; // mending di satuin di game kah?
 	private Player _player;
 	private Enemy _enemy;
+	private MainForm _mainForm;
 	private List<Enemy> _enemies = new()
 	{
 	};
@@ -13,18 +14,20 @@ public partial class Game : Panel
 	private string _move = "";
 	private bool typing = false;
 
-	public Game()
+	public Game(MainForm mainForm)
 	{
 		Text = "Dungeon Of Ty";
 		MinimumSize = new Size(800, 600);
 		Dock = DockStyle.Fill;
+
+		_mainForm = mainForm;
 
 		_player = new Player("Player", 100, 5, 0.1);
 		_enemy = new Enemy("Enemy", 100, 5, 0.1);
 
 		_timer = new System.Windows.Forms.Timer
 		{
-			Interval = 10000
+			Interval = 3000
 		};
 		_timer.Tick += new EventHandler(OnTick);
 
@@ -106,8 +109,16 @@ public partial class Game : Panel
 
 		if (_player.Health <= 0)
 		{
-			MessageBox.Show("lost");
-			Application.Exit();
+			MessageBox.Show("You lost!");
+			// reset everything
+			_player.WordCount = 0;
+			_move = "";
+			_timer.Stop();
+
+			MainMenu mainMenu = new MainMenu(_mainForm);
+			_mainForm.SwitchView(mainMenu);
+
+
 		} else {
 			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 		}
@@ -127,6 +138,7 @@ public partial class Game : Panel
 		*/
 		_menu.ShowInfo(_player.MoveKey, Color.DarkGray);
 		_menu.ShowInput("", Color.GreenYellow);
+		_menu.StartCountdown(3);
 		typing = true;
 	}
 
@@ -186,25 +198,36 @@ public partial class Game : Panel
 				break;
 		}
 
-		if (_enemy.Health <= 0)
+		if (_enemy.Health <= 0) // NEEDFIX: kadang display enemy health 0 tapi gk ke trigger ini?
 		{
+			// NEEDFIX : pas new enemy datang, timer nya gk di reset jadi pas player turn, itu timer masih jalan;
 			Item? dropped_item = _enemy.DropItem();
 
 			if (dropped_item != null)
 				_player.Inventory.Add(dropped_item);
 			
-			MessageBox.Show("win");
-			Application.Exit();
+			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: {Math.Max(0, _enemy.Health)}");
+			MessageBox.Show("Enemy defeated!");
+
+			// seharusnya start new enemy
+			_enemy = new Enemy("Enemy", 100, 5, 0.1);
+			MessageBox.Show("But new enemies have arrived!");
+
+			// reset timer itu gw jujur kurang ngerti itu seharusnya kek gmn
+			_timer.Stop();
+			_timer.Start();
+		} else {
+			MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
+			EnemyTurn();
 		}
 
-		MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 
 		_move = "";
 		_player.WordCount = 0;
 		_menu.HideInfo();
 		_menu.HideInput();
+		_menu.HideTimer();
 		_menu.ShowButtons();
 
-		EnemyTurn();
 	}
 }

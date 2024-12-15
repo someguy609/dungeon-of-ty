@@ -5,6 +5,9 @@ public class Menu : Panel
 	private FlowLayoutPanel _buttonsPanel;
 	private Label _infoLabel;
 	private Label _inputLabel;
+	private Label _timerLabel;
+	private System.Windows.Forms.Timer _countDownTimer;
+	private int _countDownTimerValue;
 	public Button FightButton, InventoryButton, FleeButton;
 	public TableLayoutPanel InventoryPanel;
 
@@ -56,6 +59,7 @@ public class Menu : Panel
 		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 		// butuh back button kah?
+		// perlu wkwkwk
 
 		_infoLabel = new Label
 		{
@@ -77,12 +81,28 @@ public class Menu : Panel
 			BackColor = Color.Transparent,
 		};
 
+		_timerLabel = new Label {
+			Dock = DockStyle.Fill,
+			Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
+			TextAlign = ContentAlignment.MiddleCenter,
+			AutoSize = false,
+			Visible = false,
+			BackColor = Color.Transparent,
+			Text = "3",
+		};
+
 		_inputLabel.BringToFront();
 
 		Controls.Add(_buttonsPanel);
 		Controls.Add(InventoryPanel);
 		Controls.Add(_infoLabel);
 		Controls.Add(_inputLabel);
+		Controls.Add(_timerLabel);
+
+		_countDownTimer = new System.Windows.Forms.Timer {
+			Interval = 1000,
+		};
+		_countDownTimer.Tick += CountdowTimer_Tick;
 	}
 
 	protected override void OnResize(EventArgs e)
@@ -102,6 +122,11 @@ public class Menu : Panel
 		_inputLabel.Location = new Point(
 			(Width - _inputLabel.Width) / 2,
 			(Height - _inputLabel.Height) / 2
+		);
+
+		_timerLabel.Location = new Point(
+			(Width - _timerLabel.Width) / 2,
+			(Height - _timerLabel.Height) / 2 - 50 // make it above the input label
 		);
 	}
 
@@ -123,6 +148,12 @@ public class Menu : Panel
 		_inputLabel.Show();
 	}
 
+	public void ShowTimer(string time = "0")
+	{
+		_timerLabel.Text = time;
+		_timerLabel.Show();
+	}
+
 	public void HideButtons()
 	{
 		_buttonsPanel.Hide();
@@ -136,6 +167,11 @@ public class Menu : Panel
 	public void HideInput()
 	{
 		_inputLabel.Hide();
+	}
+
+	public void HideTimer()
+	{
+		_timerLabel.Hide();
 	}
 
 	public void InitializeInventory(Player player)
@@ -169,5 +205,21 @@ public class Menu : Panel
 	public void ShowInventory()
 	{
 		InventoryPanel.Show();
+	}
+
+	public void StartCountdown(int seconds) {
+		_countDownTimerValue = seconds;
+		ShowTimer(_countDownTimerValue.ToString());
+		_countDownTimer.Start();
+	}
+
+	private void CountdowTimer_Tick(object sender, EventArgs e) {
+		_countDownTimerValue--;
+		if (_countDownTimerValue == 0) {
+			_countDownTimer.Stop();
+			HideTimer();
+		} else {
+			ShowTimer(_countDownTimerValue.ToString());
+		}
 	}
 }

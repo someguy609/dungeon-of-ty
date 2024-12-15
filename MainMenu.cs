@@ -86,7 +86,7 @@ public class MainMenu : Panel , IButtonColor {
 
     // TODO: IMPLEMENT TO NEW GAME IN GAME CLASS
     private void StartNewGame(object? sender, EventArgs e) {
-        Game game = new Game();
+        Game game = new Game(_mainForm);
         _mainForm.SwitchView(game);
     }
 
