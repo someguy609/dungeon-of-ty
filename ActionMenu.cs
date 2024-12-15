@@ -148,9 +148,9 @@ public class Menu : Panel
 		_inputLabel.Show();
 	}
 
-	public void ShowTimer(string time = "0")
+	public void ShowTimer(int time = 0)
 	{
-		_timerLabel.Text = time;
+		_timerLabel.Text = time.ToString();
 		_timerLabel.Show();
 	}
 
@@ -209,7 +209,7 @@ public class Menu : Panel
 
 	public void StartCountdown(int seconds) {
 		_countDownTimerValue = seconds;
-		ShowTimer(_countDownTimerValue.ToString());
+		ShowTimer(_countDownTimerValue);
 		_countDownTimer.Start();
 	}
 
@@ -219,7 +219,17 @@ public class Menu : Panel
 			_countDownTimer.Stop();
 			HideTimer();
 		} else {
-			ShowTimer(_countDownTimerValue.ToString());
+			ShowTimer(_countDownTimerValue);
 		}
+	}
+
+	public void PauseCountdownTimer()
+	{
+		_countDownTimer.Enabled = false;
+	}
+
+	public void ContinueCountdownTimer()
+	{
+		_countDownTimer.Enabled = true;
 	}
 }
