@@ -49,17 +49,11 @@ public partial class Game : Panel
 			StartTyping();
 		};
 
-		_menu.InitializeInventory(_player);
-
-		foreach (Button itemButton in _menu.InventoryPanel.Controls)
+		_menu.InventoryBackButton.Click += (s, e) => 
 		{
-			itemButton.Click += (s, e) =>
-			{
-				_player.State = PlayerState.USING_ITEM;
-				_menu.HideInventory();
-				StartTyping();
-			};
-		}
+			_menu.HideInventory();
+			_menu.ShowButtons();
+		};
 
 		_menu.InventoryButton.Click += (s, e) =>
 		{
@@ -93,6 +87,21 @@ public partial class Game : Panel
 	public void Reset()
 	{
 		_player = new Player("Player", 100, 10, 0.1);
+
+		_menu.InitializeInventory(_player);
+
+		foreach (Button itemButton in _menu.InventoryPanel.Controls)
+		{
+			if (itemButton == _menu.InventoryBackButton)
+				continue;
+
+			itemButton.Click += (s, e) =>
+			{
+				_player.State = PlayerState.USING_ITEM;
+				_menu.HideInventory();
+				StartTyping();
+			};
+		}
 
 		_currentEnemy = 0;
 		_enemy = _enemies[_currentEnemy];
