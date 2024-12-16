@@ -9,6 +9,8 @@ public class Menu : Panel
 	private System.Windows.Forms.Timer _countDownTimer;
 	private int _countDownTimerValue;
 	public Button FightButton, InventoryButton, FleeButton;
+	public Panel ItemsScrollPanel;
+	public TableLayoutPanel ItemsPanel;
 	public TableLayoutPanel InventoryPanel;
 	public Button InventoryBackButton;
 
@@ -51,14 +53,22 @@ public class Menu : Panel
 		};
 		_buttonsPanel.Controls.Add(FleeButton);
 
-		InventoryPanel = new TableLayoutPanel
+		ItemsScrollPanel = new Panel
 		{
 			Dock = DockStyle.Fill,
-			ColumnCount = 2,
-			Visible = false,
+			AutoScroll = true,
 		};
-		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+
+		ItemsPanel = new TableLayoutPanel
+		{
+			Dock = DockStyle.Fill,
+			AutoScroll = true,
+			ColumnCount = 2,
+		};
+		ItemsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+		ItemsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+
+		ItemsScrollPanel.Controls.Add(ItemsPanel);
 
 		InventoryBackButton = new Button
 		{
@@ -67,6 +77,16 @@ public class Menu : Panel
 			Height = 50,
 		};
 
+		InventoryPanel = new TableLayoutPanel
+		{
+			Dock = DockStyle.Fill,
+			Visible = false,
+			RowCount = 2,
+		};
+		InventoryPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
+		InventoryPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+
+		InventoryPanel.Controls.Add(ItemsScrollPanel);
 		InventoryPanel.Controls.Add(InventoryBackButton);
 
 		_infoLabel = new Label
@@ -184,26 +204,29 @@ public class Menu : Panel
 
 	public void InitializeInventory(Player player)
 	{
-		InventoryPanel.Controls.Clear();
-		InventoryPanel.Controls.Add(InventoryBackButton);
+		ItemsPanel.Controls.Clear();
+		ItemsScrollPanel.Controls.Clear();
 
 		foreach (Item item in player.Inventory.Items)
 		{
 			Button itemButton = new Button
 			{
 				Text = item.Name,
-				Dock = DockStyle.Fill,
+				// Dock = DockStyle.Fill,
+				Anchor = AnchorStyles.Left | AnchorStyles.Right,
 				Height = 50,
 			};
 
 			itemButton.Click += (s, e) =>
 			{
 				player.SelectedItem = item;
-				InventoryPanel.Controls.Remove(itemButton);
+				ItemsPanel.Controls.Remove(itemButton);
 			};
 
-			InventoryPanel.Controls.Add(itemButton);
+			ItemsPanel.Controls.Add(itemButton);
 		}
+
+		ItemsScrollPanel.Controls.Add(ItemsPanel);
 	}
 
 	public void HideInventory()

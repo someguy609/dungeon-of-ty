@@ -21,7 +21,7 @@ public class Player : Character
 
 	public Player(string name, int health, int attack, double luck) : base(name, health, attack, luck) 
     {
-        Inventory.Add(new RedSauce(), 4);
+        Inventory.Add(new RedSauce(), 9);
     }
 
     public void GetNewMove() 
