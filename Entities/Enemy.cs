@@ -123,3 +123,16 @@ public class Papyrus : Enemy
 	{
 	}
 }
+
+public class Sans : Enemy 
+{
+	private const int _spriteX = 487;
+	private const int _spriteY = 365;
+	private const int _spriteW = 109; // 596
+	private const int _spriteH = 147; // 512
+	private const int _spriteScale = 2;
+	
+	public Sans() : base("Sand", 100, 100, 1, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	{
+	}
+}
