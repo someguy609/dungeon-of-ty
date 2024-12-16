@@ -65,7 +65,7 @@ public partial class Game : Panel
 		{
 			_player.State = PlayerState.FLEEING;
 			_menu.HideButtons();
-			_menu.ShowTimer(_timer.Interval / 1000);
+			_menu.StartCountdown(_timer.Interval / 1000);
 			StartTyping();
 		};
 
@@ -148,7 +148,7 @@ public partial class Game : Panel
 	private void StartTyping()
 	{
 		_timer.Start();
-		_menu.ShowTimer(_timer.Interval / 1000);
+		_menu.StartCountdown(_timer.Interval / 1000);
 		Focus();
 		Type();
 	}
@@ -239,9 +239,10 @@ public partial class Game : Panel
 
 			if (_currentEnemy >= _enemies.Count)
 			{
-				MessageBox.Show("Congrats, you won");
-				_mainForm.SwitchToMenu();
-				return;
+				_currentEnemy = 0;
+				// MessageBox.Show("Congrats, you won");
+				// _mainForm.SwitchToMenu();
+				// return;
 			}
 
 			_enemy = _enemies[_currentEnemy];
