@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace dungeon_of_ty;
 
 public enum EnemyState
@@ -9,14 +11,54 @@ public enum EnemyState
 public class Enemy : Character
 {
 	private EnemyState _state;
+
+	protected ProgressBar _healthBar;
+
+	public Control? Render;
 	
-	public Enemy(string name, int health, int attack, double luck) : base(name, health, attack, luck)
+	public Enemy(string name, int health, int attack, double luck, string spritePath, int spriteX, int spriteY, int spriteW, int spriteH, int spriteScale) : base(name, health, attack, luck)
 	{
-		Sprite = new PictureBox
+		Image _spriteSheet = Image.FromFile(spritePath);
+		Rectangle srcRect = new Rectangle(spriteX, spriteY, spriteW, spriteH);
+		Bitmap frame = new Bitmap(spriteW, spriteH);
+
+		using (Graphics g = Graphics.FromImage(frame))
+			g.DrawImage(_spriteSheet, new Rectangle(0, 0, spriteW, spriteH), srcRect, GraphicsUnit.Pixel);
+		
+		Label nameLabel = new Label
 		{
-			Size = new Size(100, 100),
-			BackColor = Color.Gray,
+			Dock = DockStyle.Fill,
+			Text = Name,
+			Font = new Font("Arial", 16),
+			TextAlign = ContentAlignment.MiddleCenter,
 		};
+
+		_healthBar = new ProgressBar()
+		{
+			Dock = DockStyle.Fill,
+			Value = Health,
+			Maximum = MaxHealth,
+			ForeColor = Color.FromArgb(0, 230, 19),
+		};
+
+		PictureBox sprite = new PictureBox
+		{
+			Size = new Size(spriteW * spriteScale, spriteH * spriteScale),
+			Image = frame,
+			SizeMode = PictureBoxSizeMode.Zoom,
+		};
+
+		Render = new FlowLayoutPanel()
+		{
+			FlowDirection = FlowDirection.TopDown,
+			MinimumSize = new Size(sprite.Width, sprite.Height),
+			Anchor = AnchorStyles.None,
+			WrapContents = false,
+		};
+
+		Render.Controls.Add(nameLabel);
+		Render.Controls.Add(_healthBar);
+		Render.Controls.Add(sprite);
 
 		_state = EnemyState.AGGRESSIVE;
 	}
@@ -28,6 +70,7 @@ public class Enemy : Character
 
     public void Update()
 	{
+		_healthBar.Value = Health;
 		_state = Health <= MaxHealth / 3 ? EnemyState.DEFENSIVE : EnemyState.AGGRESSIVE;
 	}
 
@@ -51,5 +94,32 @@ public class Enemy : Character
 		if (Inventory.Items.Count == 0)
 			return null;
 		return Inventory.Items[_random.Next(Inventory.Items.Count)];
+	}
+}
+
+public class Napstablook : Enemy
+{
+	private const int _spriteX = 3;
+	private const int _spriteY = 21;
+	private const int _spriteW = 52;
+	private const int _spriteH = 76;
+	private const int _spriteScale = 5;
+
+	public Napstablook() : base("Napsta", 100, 1, 0.1, "assets/spritesheets/enemy1-napstablook.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	{
+	}
+}
+
+public class Papyrus : Enemy
+{
+	private const int _spriteX = 340;
+	private const int _spriteY = 301;
+	private const int _spriteW = 142;
+	private const int _spriteH = 211;
+	private const int _spriteScale = 2;
+	private Image _spriteSheet = Image.FromFile("assets/spritesheets/spritesheet.png");
+
+	public Papyrus() : base("Papi", 200, 5, 0.2, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	{
 	}
 }

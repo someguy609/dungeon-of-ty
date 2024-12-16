@@ -22,16 +22,6 @@ public class Player : Character
 	public Player(string name, int health, int attack, double luck) : base(name, health, attack, luck) 
     {
         Inventory.Add(new RedSauce(), 4);
-        
-        // player sebenarnya gk perlu sprite gk sih
-        // kan jg kita gk bakal liat :sob:
-        Sprite = new PictureBox
-        {
-            Dock = DockStyle.Bottom,
-            Anchor = AnchorStyles.Bottom,
-            Size = new Size(800, 100),
-            BackColor = Color.Gray,
-        };
     }
 
     public void GetNewMove() 

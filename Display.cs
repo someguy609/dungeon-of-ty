@@ -1,37 +1,16 @@
 namespace dungeon_of_ty;
 
-public class Display : Panel // untuk kasi liat sprites
+public class Display : TableLayoutPanel
 {
-	private Control _playerSprite, _enemySprite;
-	private System.Windows.Forms.Timer _timer;
-
-	public Display(Control playerSprite, Control enemySprite)
+	public Display()
 	{
-		_playerSprite = playerSprite;
-		_enemySprite = enemySprite;
-
-		_timer = new System.Windows.Forms.Timer
-		{
-			Interval = 20
-		};
-		_timer.Tick += (s, args) => 
-		{
-			if (_enemySprite.Top + 2 >= ClientSize.Height)
-			{
-				Controls.Remove(_enemySprite);
-				_timer.Stop();
-				return;
-			}
-
-			_enemySprite.Top += 2;
-		};
-
-		Controls.Add(_playerSprite);
-		Controls.Add(_enemySprite);
+		RowCount = 1;
+		ColumnCount = 1;
 	}
 
-	public void RemoveEnemy()
+	public void ChangeEnemy(Control enemySprite)
 	{
-
+		Controls.Clear();
+		Controls.Add(enemySprite);
 	}
 }
