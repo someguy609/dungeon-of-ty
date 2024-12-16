@@ -65,7 +65,7 @@ public partial class Game : Panel
 		{
 			_player.State = PlayerState.FLEEING;
 			_menu.HideButtons();
-			_menu.StartCountdown(_timer.Interval / 1000);
+			// _menu.StartCountdown(_timer.Interval / 1000);
 			StartTyping();
 		};
 
@@ -83,7 +83,7 @@ public partial class Game : Panel
 		{
 			Text = "Quit",
 			Location = new Point(10, 10),
-			Size = new Size(50, 50),
+			Size = new Size(100, 100),
 		};
 
 		quitButton.Click += (s, e) =>
@@ -170,6 +170,7 @@ public partial class Game : Panel
 	private void StartTyping()
 	{
 		_timer.Start();
+		// _menu.StartCountdown(_timer.Interval / 1000);
 		_menu.StartCountdown(_timer.Interval / 1000);
 		Focus();
 		Type();
