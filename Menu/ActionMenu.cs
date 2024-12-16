@@ -10,6 +10,7 @@ public class Menu : Panel
 	private int _countDownTimerValue;
 	public Button FightButton, InventoryButton, FleeButton;
 	public TableLayoutPanel InventoryPanel;
+	public Button InventoryBackButton;
 
 	public Menu()
 	{
@@ -58,8 +59,15 @@ public class Menu : Panel
 		};
 		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 		InventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-		// butuh back button kah?
-		// perlu wkwkwk
+
+		InventoryBackButton = new Button
+		{
+			Dock = DockStyle.Fill,
+			Text = "Back",
+			Height = 50,
+		};
+
+		InventoryPanel.Controls.Add(InventoryBackButton);
 
 		_infoLabel = new Label
 		{
@@ -177,6 +185,7 @@ public class Menu : Panel
 	public void InitializeInventory(Player player)
 	{
 		InventoryPanel.Controls.Clear();
+		InventoryPanel.Controls.Add(InventoryBackButton);
 
 		foreach (Item item in player.Inventory.Items)
 		{
