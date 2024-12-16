@@ -52,9 +52,9 @@ public class Enemy : Character
 		Render = new FlowLayoutPanel()
 		{
 			FlowDirection = FlowDirection.TopDown,
-			MinimumSize = new Size(sprite.Width, sprite.Height),
 			Anchor = AnchorStyles.None,
 			WrapContents = false,
+			AutoSize = true,
 		};
 
 		Render.Controls.Add(nameLabel);
@@ -118,8 +118,7 @@ public class Papyrus : Enemy
 	private const int _spriteW = 142;
 	private const int _spriteH = 211;
 	private const int _spriteScale = 2;
-	private Image _spriteSheet = Image.FromFile("assets/spritesheets/spritesheet.png");
-
+	
 	public Papyrus() : base("Papi", 200, 5, 0.2, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
 	{
 	}
