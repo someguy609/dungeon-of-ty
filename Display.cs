@@ -1,6 +1,6 @@
 namespace dungeon_of_ty;
 
-public class Display : Panel
+public class Display : Panel // untuk kasi liat sprites
 {
 	private Control _playerSprite, _enemySprite;
 	private System.Windows.Forms.Timer _timer;
