@@ -170,7 +170,6 @@ public partial class Game : Panel
 	private void StartTyping()
 	{
 		_timer.Start();
-		// _menu.StartCountdown(_timer.Interval / 1000);
 		_menu.StartCountdown(_timer.Interval / 1000);
 		Focus();
 		Type();

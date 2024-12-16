@@ -145,12 +145,12 @@ public class Menu : Panel
 
 		_infoLabel.Location = new Point(
 			(Width - _infoLabel.Width) / 2,
-			(Height - _infoLabel.Height) / 2
+			(Height - _infoLabel.Height) / 2 + 25
 		);
 
 		_inputLabel.Location = new Point(
 			(Width - _inputLabel.Width) / 2,
-			(Height - _inputLabel.Height) / 2
+			(Height - _inputLabel.Height) / 2 + 25
 		);
 
 		_timerLabel.Location = new Point(
