@@ -49,7 +49,7 @@ public partial class Game : Panel
 			StartTyping();
 		};
 
-		_menu.InventoryBackButton.Click += (s, e) => 
+		_menu.InventoryBackButton.Click += (s, e) =>
 		{
 			_menu.HideInventory();
 			_menu.ShowButtons();
@@ -218,7 +218,10 @@ public partial class Game : Panel
 				break;
 			case PlayerState.FLEEING:
 				if (_player.Flee(_player.WordCount))
+				{
 					MessageBox.Show("Player fled");
+					_enemy.Health = 0;
+				}
 				else
 					MessageBox.Show("Player failed to flee");
 				break;
