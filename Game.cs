@@ -37,7 +37,7 @@ public partial class Game : Panel
 		_menu = new Menu
 		{
 			Dock = DockStyle.Bottom,
-			Height = 150,
+			Height = 200,
 			BackColor = Color.AliceBlue,
 			Font = new Font("Arial", 14),
 		};
@@ -74,7 +74,7 @@ public partial class Game : Panel
 		_display = new Display()
 		{
 			Dock = DockStyle.Fill,
-			MinimumSize = new Size(800, 450),
+			AutoSize = true,
 			TabStop = false,
 		};
 		Controls.Add(_display);
@@ -86,7 +86,13 @@ public partial class Game : Panel
 			Size = new Size(50, 50),
 		};
 
-		quitButton.Click += (s, e) => mainForm.SwitchToMenu();
+		quitButton.Click += (s, e) =>
+		{
+			_menu.HideButtons();
+			_menu.HideInfo();
+			_menu.HideInventory();
+			mainForm.SwitchToMenu();
+		};
 
 		Controls.Add(quitButton);
 		quitButton.BringToFront();
@@ -102,11 +108,8 @@ public partial class Game : Panel
 
 		_menu.InitializeInventory(_player);
 
-		foreach (Button itemButton in _menu.InventoryPanel.Controls)
+		foreach (Button itemButton in _menu.ItemsPanel.Controls)
 		{
-			if (itemButton == _menu.InventoryBackButton)
-				continue;
-
 			itemButton.Click += (s, e) =>
 			{
 				_player.State = PlayerState.USING_ITEM;
@@ -117,9 +120,9 @@ public partial class Game : Panel
 
 		_enemies = new()
 		{
+			new Sans(),
 			new Napstablook(),
 			new Papyrus(),
-			new Sans(),
 		};
 
 		_currentEnemy = 0;
