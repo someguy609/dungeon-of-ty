@@ -31,6 +31,7 @@ public class Enemy : Character
 			Text = Name,
 			Font = new Font("Arial", 16),
 			TextAlign = ContentAlignment.MiddleCenter,
+			AutoSize = true,
 		};
 
 		_healthBar = new ProgressBar()
