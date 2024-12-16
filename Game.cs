@@ -115,6 +115,12 @@ public partial class Game : Panel
 			};
 		}
 
+		_enemies = new()
+		{
+			new Napstablook(),
+			new Papyrus(),
+		};
+
 		_currentEnemy = 0;
 		_enemy = _enemies[_currentEnemy];
 		_display.ChangeEnemy(_enemy.Render);
