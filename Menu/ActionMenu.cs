@@ -75,6 +75,7 @@ public class Menu : Panel
 			Dock = DockStyle.Fill,
 			Text = "Back",
 			Height = 50,
+			BackColor = Color.Gray,
 		};
 
 		InventoryPanel = new TableLayoutPanel
