@@ -76,7 +76,7 @@ public class KarateManual : Item
 
 public class MildMender : Item
 {
-	public MildMender() : base("", "") {}
+	public MildMender() : base("Mild Mender", "Mends your physique mildly") {}
 
     public override void Use(Character target, int wordCount)
     {
