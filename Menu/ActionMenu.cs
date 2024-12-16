@@ -223,6 +223,9 @@ public class Menu : Panel
 				ItemsPanel.Controls.Remove(itemButton);
 			};
 
+			ToolTip itemToolTip = new ToolTip();
+			itemToolTip.SetToolTip(itemButton, item.Description);
+
 			ItemsPanel.Controls.Add(itemButton);
 		}
 
