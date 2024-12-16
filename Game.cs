@@ -79,6 +79,18 @@ public partial class Game : Panel
 		};
 		Controls.Add(_display);
 
+		Button quitButton = new()
+		{
+			Text = "Quit",
+			Location = new Point(10, 10),
+			Size = new Size(50, 50),
+		};
+
+		quitButton.Click += (s, e) => mainForm.SwitchToMenu();
+
+		Controls.Add(quitButton);
+		quitButton.BringToFront();
+
 		KeyDown += new KeyEventHandler(OnKeyDown);
 
 		Reset();
