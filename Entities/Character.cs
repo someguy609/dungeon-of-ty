@@ -60,4 +60,6 @@ public abstract class Character
 	{
 		return (Luck + wordCount / 100d) > _random.NextDouble();
 	}
+
+	public abstract void Reset();
 }

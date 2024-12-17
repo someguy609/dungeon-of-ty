@@ -16,7 +16,7 @@ public class Enemy : Character
 
 	public Control? Render;
 	
-	public Enemy(string name, int health, int attack, double luck, string spritePath, int spriteX, int spriteY, int spriteW, int spriteH, int spriteScale) : base(name, health, attack, luck)
+	public Enemy(string name, string description, int health, int attack, double luck, string spritePath, int spriteX, int spriteY, int spriteW, int spriteH, int spriteScale) : base(name, health, attack, luck)
 	{
 		Image _spriteSheet = Image.FromFile(spritePath);
 		Rectangle srcRect = new Rectangle(spriteX, spriteY, spriteW, spriteH);
@@ -61,13 +61,30 @@ public class Enemy : Character
 		Render.Controls.Add(_healthBar);
 		Render.Controls.Add(sprite);
 
+		ToolTip toolTip = new ToolTip();
+		toolTip.SetToolTip(sprite, description);
+
 		_state = EnemyState.AGGRESSIVE;
+		Inventory.Add(new MildMender());
+		Inventory.Add(new RedSauce());
+		Inventory.Add(new KarateManual());
 	}
 
     public override void Fight(Character target)
     { // logika nya apa dah
 		target.Health -= Attack + (int)Math.Ceiling(_random.Next(Vocabulary.Words.Count) * (1 + Luck));
     }
+
+	public override void Reset()
+	{
+		Health = MaxHealth;
+		_healthBar.Value = MaxHealth;
+
+		Inventory.Items.Clear();
+		Inventory.Add(new MildMender());
+		Inventory.Add(new RedSauce());
+		Inventory.Add(new KarateManual());
+	}
 
     public void Update()
 	{
@@ -106,7 +123,7 @@ public class Napstablook : Enemy
 	private const int _spriteH = 76;
 	private const int _spriteScale = 5;
 
-	public Napstablook() : base("Napsta", 100, 1, 0.1, "assets/spritesheets/enemy1-napstablook.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	public Napstablook() : base("Napsta", "boo", 100, 1, 0.1, "assets/spritesheets/enemy1-napstablook.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
 	{
 	}
 }
@@ -119,7 +136,7 @@ public class Papyrus : Enemy
 	private const int _spriteH = 211;
 	private const int _spriteScale = 2;
 	
-	public Papyrus() : base("Papi", 200, 5, 0.2, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	public Papyrus() : base("Papi", "heeheeheehaw", 200, 5, 0.2, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
 	{
 	}
 }
@@ -128,11 +145,11 @@ public class Sans : Enemy
 {
 	private const int _spriteX = 487;
 	private const int _spriteY = 365;
-	private const int _spriteW = 109; // 596
-	private const int _spriteH = 147; // 512
+	private const int _spriteW = 109;
+	private const int _spriteH = 147;
 	private const int _spriteScale = 2;
 	
-	public Sans() : base("Sand", 100, 100, 1, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
+	public Sans() : base("Sand", "i hate sand", 100, 100, 1, "assets/spritesheets/spritesheet.png", _spriteX, _spriteY, _spriteW, _spriteH, _spriteScale)
 	{
 	}
 }

@@ -21,7 +21,7 @@ public class Player : Character
 
 	public Player(string name, int health, int attack, double luck) : base(name, health, attack, luck) 
     {
-        Inventory.Add(new RedSauce(), 9);
+        Inventory.Add(new RedSauce());
     }
 
     public void GetNewMove() 
@@ -35,5 +35,9 @@ public class Player : Character
     {
         target.Health -= Attack + (int)Math.Floor(WordCount * (1 + Luck));
         WordCount = 0;
+    }
+    public override void Reset()
+    {
+        Health = MaxHealth;
     }
 }
