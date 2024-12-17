@@ -119,12 +119,8 @@ public partial class Game : Panel
 			};
 		}
 
-		_enemies = new()
-		{
-			new Napstablook(),
-			new Papyrus(),
-			new Sans(),
-		};
+		foreach (Enemy e in _enemies)
+			e.Reset();
 
 		_currentEnemy = 0;
 		_enemy = _enemies[_currentEnemy];
@@ -261,6 +257,7 @@ public partial class Game : Panel
 			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: 0");
 			MessageBox.Show("Enemy defeated!");
 
+			_enemy.Reset();
 			_currentEnemy++;
 
 			if (_currentEnemy >= _enemies.Count)
