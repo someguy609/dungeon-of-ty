@@ -210,6 +210,8 @@ public partial class Game : Panel
 		_enemy = _enemies[_currentEnemy];
 		_display.ChangeEnemy(_enemy.Render);
 
+		_menu.InitializeInventory(_player);
+
 		MessageBox.Show("But new enemies have arrived!");
 	}
 
