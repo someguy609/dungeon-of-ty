@@ -65,6 +65,9 @@ public class Enemy : Character
 		toolTip.SetToolTip(sprite, description);
 
 		_state = EnemyState.AGGRESSIVE;
+		Inventory.Add(new MildMender());
+		Inventory.Add(new RedSauce());
+		Inventory.Add(new KarateManual());
 	}
 
     public override void Fight(Character target)
@@ -76,6 +79,11 @@ public class Enemy : Character
 	{
 		Health = MaxHealth;
 		_healthBar.Value = MaxHealth;
+
+		Inventory.Items.Clear();
+		Inventory.Add(new MildMender());
+		Inventory.Add(new RedSauce());
+		Inventory.Add(new KarateManual());
 	}
 
     public void Update()
