@@ -186,6 +186,33 @@ public partial class Game : Panel
 		typing = true;
 	}
 
+	private void NextLevel()
+	{
+		Item? dropped_item = _enemy.DropItem();
+
+		if (dropped_item != null)
+			_player.Inventory.Add(dropped_item);
+		
+		MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: 0");
+		MessageBox.Show("Enemy defeated!");
+
+		_enemy.Reset();
+		_currentEnemy++;
+
+		if (_currentEnemy >= _enemies.Count)
+		{
+			_currentEnemy = 0;
+			// MessageBox.Show("Congrats, you won");
+			// _mainForm.SwitchToMenu();
+			// return;
+		}
+
+		_enemy = _enemies[_currentEnemy];
+		_display.ChangeEnemy(_enemy.Render);
+
+		MessageBox.Show("But new enemies have arrived!");
+	}
+
 	private void OnKeyDown(object? sender, KeyEventArgs e)
 	{
 		if (!typing) // if not player turn
@@ -246,38 +273,18 @@ public partial class Game : Panel
 				break;
 		}
 
-		if (_enemy.Health <= 0) // NEEDFIX: kadang display enemy health 0 tapi gk ke trigger ini?
+		if (_enemy.Health <= 0)
 		{
 			// NEEDFIX : pas new enemy datang, timer nya gk di reset jadi pas player turn, itu timer masih jalan;
-			Item? dropped_item = _enemy.DropItem();
-
-			if (dropped_item != null)
-				_player.Inventory.Add(dropped_item);
-
-			MessageBox.Show($"Player Turn\nPlayer health: {_player.Health}\nEnemy health: 0");
-			MessageBox.Show("Enemy defeated!");
-
-			_enemy.Reset();
-			_currentEnemy++;
-
-			if (_currentEnemy >= _enemies.Count)
-			{
-				_currentEnemy = 0;
-				// MessageBox.Show("Congrats, you won");
-				// _mainForm.SwitchToMenu();
-				// return;
-			}
-
-			_enemy = _enemies[_currentEnemy];
-			_display.ChangeEnemy(_enemy.Render);
-			MessageBox.Show("But new enemies have arrived!");
-
-			_timer.Stop();
+			NextLevel();
 		}
 		else
 		{
 			MessageBox.Show($"Enemy Turn\nPlayer health: {_player.Health}\nEnemy health: {_enemy.Health}");
 			EnemyTurn();
+
+			if (_enemy.Health == 0) // fled
+				NextLevel();
 		}
 
 		_move = "";
