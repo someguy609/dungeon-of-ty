@@ -36,4 +36,8 @@ public class Player : Character
         target.Health -= Attack + (int)Math.Floor(WordCount * (1 + Luck));
         WordCount = 0;
     }
+    public override void Reset()
+    {
+        Health = MaxHealth;
+    }
 }

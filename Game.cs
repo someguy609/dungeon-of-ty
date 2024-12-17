@@ -26,7 +26,7 @@ public partial class Game : Panel
 
 		_mainForm = mainForm;
 
-		_player = new Player("Player", 100, 10, 0.1);
+		_player = new Player("Player", 100, 10, 0.7);
 		_enemy = _enemies[_currentEnemy];
 
 		_timer = new System.Windows.Forms.Timer
@@ -105,7 +105,7 @@ public partial class Game : Panel
 
 	public void Reset()
 	{
-		_player = new Player("Player", 100, 10, 0.1);
+		_player.Reset();
 
 		_menu.InitializeInventory(_player);
 

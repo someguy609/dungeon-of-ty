@@ -75,7 +75,7 @@ public class Enemy : Character
 		target.Health -= Attack + (int)Math.Ceiling(_random.Next(Vocabulary.Words.Count) * (1 + Luck));
     }
 
-	public void Reset()
+	public override void Reset()
 	{
 		Health = MaxHealth;
 		_healthBar.Value = MaxHealth;
