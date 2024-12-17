@@ -16,7 +16,6 @@ public static class Vocabulary
 		"where", "which", "while", "white", "large", 
 		"aardvark",
 		"serendipity",
-		// "pneumonoultramicroscopicsilicovolcanoconiosis"
 	};
 
 	public static string GetWord() { return Words[_random.Next(Words.Count)]; }
