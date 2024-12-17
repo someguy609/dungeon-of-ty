@@ -11,6 +11,7 @@ public partial class Game : Panel
 		{
 			new Napstablook(),
 			new Papyrus(),
+			new Sans(),
 		};
 	private int _currentEnemy = 0;
 	private System.Windows.Forms.Timer _timer;
@@ -120,9 +121,9 @@ public partial class Game : Panel
 
 		_enemies = new()
 		{
-			new Sans(),
 			new Napstablook(),
 			new Papyrus(),
+			new Sans(),
 		};
 
 		_currentEnemy = 0;
